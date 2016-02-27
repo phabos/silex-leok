@@ -1,0 +1,41 @@
+<section class="grid">
+    <a class="grid__item fade" ng-repeat="article in articles" ng-click="loadDetailArticle('{*article.articleId*}', '{*article.pos*}')" id="grid_item_{*article.articleId*}">
+    <div class="padding-title">
+        <h2 class="title title--preview">{*article.title*}</h2>
+        <div class="loader"></div>
+        <span class="category">{*article.description*}</span>
+    </div>
+    <div class="meta meta--preview">
+        <img class="meta__avatar" ng-src="{*article.smallthumb*}" />
+        <span class="meta__date"><i class="fa fa-calendar-o"></i> {*article.date*}</span>
+        <!--span class="meta__reading-time"><i class="fa fa-clock-o"></i> 3 min read</span-->
+    </div>
+    </a>
+    <footer class="page-meta">
+        <span ng-hide="showNoMore == false">No more stories</span>
+        <span ng-click="loadMoreArticles()" ng-hide="showMore == false">Older stories...</span>
+    </footer>
+</section>
+
+<section class="content">
+    <div class="scroll-wrap">
+        <article class="content__item" id="grid_article_{*article.articleId*}" ng-repeat="article in articles" id="{*article.articleId*}">
+            <span class="category category--full">{* article.tags *}</span>
+            <h2 class="title title--full">{* article.title *}</h2>
+            <div class="meta meta--full" ng-style="{'background-image':'url(\'{*article.bigthumb*}\')'}">
+                <span class="meta__date"><i class="fa fa-calendar-o"></i> {* article.date *}</span>
+            </div>
+            <p ng-bind-html="article.content"></p>
+            <p class="acenter mgtop" ng-if="article.pattern"><a target="_blank" href="{* article.pattern *}"><i class="fa fa-chevron-circle-right"></i>&nbsp;&nbsp;Télécharger le pattern</a></p>
+            <div class="carousel-container" ng-if="article.gallery">
+                <ul rn-carousel class="image" rn-carousel-controls>
+                    <li ng-repeat="image in article.gallery track by $index">
+                        <div class="layer"><img ng-src="{* image *}" /></div>
+                    </li>
+                </ul>
+            </div>
+            <div class="clearfix"></div>
+        </article>
+    </div>
+    <a class="close-button" ng-click="hideContent()"><i class="fa fa-close"></i><span>Close</span></a>
+</section>
