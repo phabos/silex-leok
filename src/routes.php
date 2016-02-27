@@ -11,9 +11,9 @@
     	->bind('articleslist');
 
 	$app->error(function (\Exception $e, $code) use ($app) {
-		/*if ($app['debug']) {
+		if ($app['debug']) {
 			return;
-		}*/
+		}
 
 		// 404.html, or 40x.html, or 4xx.html, or error.html
 		$templates = array(
