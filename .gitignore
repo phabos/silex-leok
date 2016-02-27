@@ -2,3 +2,4 @@ config/
 config/*
 var/
 var/*
+var/logs/silex_dev.log
