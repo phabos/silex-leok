@@ -13,4 +13,12 @@
 	    	return $app['twig']->render( 'main.html', array( 'test '=> 'Hello' ) );
 	    }
 
+      public function articlesListAction( Application $app )
+      {
+        $content = file_get_contents( __DIR__.'/../bouchon.js' );
+        echo $content;
+        die();
+        //return $app->json( $content );
+      }
+
 	}

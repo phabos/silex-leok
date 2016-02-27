@@ -40,7 +40,7 @@ app.controller('ArticleCtrl', function($scope, $http, $routeParams, getHttp, mai
         // Global functio to get the article
     var grabMoreArticle = function() {
             $scope.showMore = 0;
-            getHttp.httpRequest(mainDomain.name + '/api/article.json?offset=' + $scope.offset).success(function(data, status, headers, config) {
+            getHttp.httpRequest(mainDomain.name + '/api/article.json/?offset=' + $scope.offset).success(function(data, status, headers, config) {
                 if (data.length > 0) {
                     $scope.showMore = 1;
                 } else {
