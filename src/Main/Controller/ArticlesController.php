@@ -10,7 +10,7 @@
 
 	    public function indexAction( Application $app )
 	    {
-	    	return $app['twig']->render( 'main.html', array( 'test '=> 'Hello' ) );
+	    	return $app['twig']->render( 'main.html', array() );
 	    }
 
       public function articlesListAction( Application $app )

@@ -14,6 +14,11 @@
 		'twig.path' => $app['twig.path']
 	));
 
+	$app->register(new Silex\Provider\SecurityServiceProvider());
+	$app->register(new Silex\Provider\RememberMeServiceProvider());
+
+	$app->register(new Silex\Provider\SessionServiceProvider());
+
 	$app->before(function (Symfony\Component\HttpFoundation\Request $request, Silex\Application $app) {
     $app['twig']->addGlobal( 'current_page_name', $request->get( "_route" ) );
     $app['twig']->addGlobal( 'base_url', $app['base.url'] );

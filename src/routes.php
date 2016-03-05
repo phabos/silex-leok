@@ -10,6 +10,9 @@
   $app->get('/api/article.json/', 'Main\Controller\ArticlesController::articlesListAction')
     	->bind('articleslist');
 
+  $app->get('/login', 'Main\Controller\UsersController::loginAction')
+      ->bind('userlogin');
+
 	$app->error(function (\Exception $e, $code) use ($app) {
 		if ($app['debug']) {
 			return;
