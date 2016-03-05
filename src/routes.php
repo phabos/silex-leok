@@ -13,6 +13,9 @@
   $app->get('/login', 'Main\Controller\UsersController::loginAction')
       ->bind('userlogin');
 
+  $app->get('/admin', 'Main\Controller\AdminController::indexAction')
+      ->bind('adminindex');
+
 	$app->error(function (\Exception $e, $code) use ($app) {
 		if ($app['debug']) {
 			return;
