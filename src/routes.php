@@ -16,6 +16,9 @@
   $app->get('/admin', 'Main\Controller\AdminController::indexAction')
       ->bind('adminindex');
 
+  $app->post('/admin/settings', 'Main\Controller\AdminController::settingsAction')
+      ->bind('adminsettings');
+
 	$app->error(function (\Exception $e, $code) use ($app) {
 		if ($app['debug']) {
 			return;
