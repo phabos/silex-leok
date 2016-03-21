@@ -17,8 +17,8 @@ class AdminController
 	{
 		if($request->isXmlHttpRequest())
 		{
-			$datas = @json_decode($request->getContent(), true);
-			print_r($datas);
+    		$app['db']->executeUpdate( "UPDATE options SET value = ? WHERE name = 'settings'", array( $request->getContent() ) );
+			echo 'ok';
 			die();
 		}
 

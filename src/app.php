@@ -24,6 +24,8 @@
     $app['twig']->addGlobal( 'base_url', $app['base.url'] );
 	});
 
+	$app->register(new Silex\Provider\DoctrineServiceProvider());
+
 	/***************** REPO ********************/
 
 	/*$app['repository.content'] = $app->share(function ($app) {
