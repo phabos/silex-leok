@@ -17,7 +17,8 @@ class AdminController
 	{
 		if($request->isXmlHttpRequest())
 		{
-			print_r($request->getContent());
+			$datas = @json_decode($request->getContent(), true);
+			print_r($datas);
 			die();
 		}
 

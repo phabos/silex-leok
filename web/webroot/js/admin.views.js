@@ -15,12 +15,26 @@ var SettingsView = Backbone.View.extend({
   },
 
   events: {
-    "click input[type=button]": "doSearch"
+    "click button.btn-primary": "saveSettings"
   },
 
-  doSearch: function( event ){
-    // Button clicked, you can access the element that was clicked with event.currentTarget
-    alert( "Search for " + $("#search_input").val() );
+  saveSettings: function( event ){
+    var settings = new Settings();
+    var view = this;
+
+    this.$el.find("input[data-field]").each(function(){
+      settings.set(this.getAttribute("data-field"), this.value);
+    });
+
+    settings.save({},{
+      success:function(){
+        console.log('we re good');
+      },
+      error:function(err){
+        throw err;
+      }
+    });
+
   }
 
 });
