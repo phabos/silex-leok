@@ -1,17 +1,42 @@
+/*******  App Logic  *******/
+var App = {
+  help: function() {
+    console.log("help");
+  },
+  animateResponse: function(response) {
+    jQuery('#message').html(response);
+    $('#message').css({top: 80});
+    setTimeout(function(){ $('#message').css({top: -200}); }, 3000);
+    jQuery('.btn-primary i').removeClass('fa-spin');
+  },
+  animateBtn: function() {
+    jQuery('.btn-primary i').addClass('fa-spin');
+  }
+};
+
+/*******  Settings View  *******/
 var SettingsView = Backbone.View.extend({
   el: $("#main_content"),
 
   initialize: function(){
+    this.settings = new Settings;
     this.render();
+    this.xhr = false;
   },
 
   render: function(){
-    //Pass variables in using Underscore.js Template
-    //var variables = { search_label: "My Search" };
-    // Compile the template using underscore
     var template = _.template( $("#settings_template").html() );
-    // Load the compiled HTML into the Backbone "el"
-    this.$el.html( template );
+    var obj = this;
+
+    // fetch settings && loading && pass to view
+    this.settings.fetch({
+      success: function (settings) {
+        obj.$el.html( template( obj.settings.toJSON() ) );
+      }
+    });
+
+    //this.$el.html( template( this.settings.toJSON() ) );
+
   },
 
   events: {
@@ -19,16 +44,21 @@ var SettingsView = Backbone.View.extend({
   },
 
   saveSettings: function( event ){
-    var settings = new Settings();
-    var view = this;
+    var obj = this;
+    App.animateBtn();
+    if( this.xhr == true )
+      return;
+
+    this.xhr = true;
 
     this.$el.find("input[data-field]").each(function(){
-      settings.set(this.getAttribute("data-field"), this.value);
+      obj.settings.set(this.getAttribute("data-field"), this.value);
     });
 
-    settings.save({},{
-      success:function(){
-        console.log('we re good');
+    this.settings.save({},{
+      success:function(model, response){
+        App.animateResponse(response.msg);
+        obj.xhr = false;
       },
       error:function(err){
         throw err;
@@ -39,6 +69,7 @@ var SettingsView = Backbone.View.extend({
 
 });
 
+/*******  Article View  *******/
 var ArtilcesView = Backbone.View.extend({
   el: $("#main_content"),
 
@@ -55,6 +86,7 @@ var ArtilcesView = Backbone.View.extend({
 
 });
 
+/*******  Home View  *******/
 var HomeView = Backbone.View.extend({
   el: $("#main_content"),
 

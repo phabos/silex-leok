@@ -28,6 +28,6 @@
 
 	/***************** REPO ********************/
 
-	/*$app['repository.content'] = $app->share(function ($app) {
-		return new TfJass\Repository\ContentRepository($app['db']);
-	});*/
+	$app['repository.options'] = $app->share(function ($app) {
+		return new Main\Repository\OptionsRepository($app['db']);
+	});
