@@ -16,6 +16,9 @@
   $app->get('/admin', 'Main\Controller\AdminController::indexAction')
       ->bind('adminindex');
 
+  $app->get('/admin/articles', 'Main\Controller\AdminController::articlesAction')
+      ->bind('adminarticles');
+
   $app->match('/admin/settings', 'Main\Controller\AdminController::settingsAction')
       ->bind('adminsettings');
 

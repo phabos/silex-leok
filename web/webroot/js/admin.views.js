@@ -31,7 +31,7 @@ var SettingsView = Backbone.View.extend({
     // fetch settings && loading && pass to view
     this.settings.fetch({
       success: function (settings) {
-        obj.$el.html( template( obj.settings.toJSON() ) );
+        obj.$el.html( template( { settings: obj.settings.toJSON() } ) );
       }
     });
 
@@ -74,14 +74,19 @@ var ArtilcesView = Backbone.View.extend({
   el: $("#main_content"),
 
   initialize: function(){
+    this.articles = new Articles;
     this.render();
   },
 
   render: function(){
-    // Compile the template using underscore
     var template = _.template( $("#articles_template").html() );
-    // Load the compiled HTML into the Backbone "el"
-    this.$el.html( template );
+    var obj = this;
+
+    this.articles.fetch({
+      success: function (articles) {
+        obj.$el.html( template( { articles: obj.articles.toJSON() } ) );
+      }
+    });
   },
 
 });

@@ -5,16 +5,16 @@
   <form>
     <fieldset class="form-group">
       <label for="adminEmail">Email site</label>
-      <input type="email" data-field="email" class="form-control" id="adminEmail" placeholder="Enter email" value="<%= email %>">
+      <input type="email" data-field="email" class="form-control" id="adminEmail" placeholder="Enter email" value="<%= settings.email %>">
       <small class="text-muted">Email utilisé pour les formulaires contact du site.</small>
     </fieldset>
     <fieldset class="form-group">
       <label for="titreSite">Site title</label>
-      <input type="text" data-field="title" class="form-control" id="titreSite" placeholder="Site title" value="<%= title %>">
+      <input type="text" data-field="title" class="form-control" id="titreSite" placeholder="Site title" value="<%= settings.title %>">
     </fieldset>
     <fieldset class="form-group">
       <label for="sloganSite">Site slogan</label>
-      <input type="text" data-field="slogan" class="form-control" id="sloganSite" placeholder="Site slogan" value="<%= slogan %>">
+      <input type="text" data-field="slogan" class="form-control" id="sloganSite" placeholder="Site slogan" value="<%= settings.slogan %>">
     </fieldset>
     <button type="submit" class="btn btn-primary"><i class="fa fa-cog"></i> Enregistrer les options</button>
   </form
@@ -27,5 +27,22 @@
 
 <!-- Article template -->
 <script type="text/template" id="articles_template">
-  Article page
+  <table class="table table-condensed">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Title</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% _.each(articles, function (article) { %>
+        <tr>
+          <th scope="row"><%= article.id %></th>
+          <td><%= article.title %></td>
+          <td><a href="/<%= article.id %>"><i class="fa fa-pencil-square-o"></i></a></td>
+        </tr>
+      <% }); %>
+    </tbody>
+  </table>
 </script>

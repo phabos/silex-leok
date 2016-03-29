@@ -31,3 +31,11 @@
 	$app['repository.options'] = $app->share(function ($app) {
 		return new Main\Repository\OptionsRepository($app['db']);
 	});
+
+	$app['repository.article'] = $app->share(function ($app) {
+		return new Main\Repository\ArticlesRepository($app['db']);
+	});
+
+	$app['repository.tag'] = $app->share(function ($app) {
+		return new Main\Repository\TagsReposiroty($app['db']);
+	});

@@ -1,5 +1,5 @@
 var Settings = Backbone.Model.extend({
-  urlRoot: "/admin/settings",
+  urlRoot: '/admin/settings',
 
   defaults: {
     'email': '',
@@ -11,4 +11,27 @@ var Settings = Backbone.Model.extend({
     console.log('Here init settings model');
   },
 
+});
+
+var Article = Backbone.Model.extend({
+  urlRoot: '/admin/article',
+
+  defaults: {
+    'id': '',
+    'title': '',
+    'content': '',
+    'excerpt': '',
+    'gallery': '',
+    'tags': ''
+  },
+
+  initialize: function() {
+    console.log('Here init article model');
+  },
+
+});
+
+var Articles = Backbone.Collection.extend({
+  url: '/admin/articles',
+  model: Article
 });
