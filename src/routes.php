@@ -19,6 +19,9 @@
   $app->get('/admin/articles', 'Main\Controller\AdminController::articlesAction')
       ->bind('adminarticles');
 
+  $app->get('/admin/article/{id}', 'Main\Controller\AdminController::getArticleAction')
+      ->convert('id', function ($id) use ($app) { if((int) $id){ return (int) $id; }});
+
   $app->match('/admin/settings', 'Main\Controller\AdminController::settingsAction')
       ->bind('adminsettings');
 

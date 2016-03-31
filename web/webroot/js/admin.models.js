@@ -14,7 +14,7 @@ var Settings = Backbone.Model.extend({
 });
 
 var Article = Backbone.Model.extend({
-  urlRoot: '/admin/article',
+  url: '/admin/article/',
 
   defaults: {
     'id': '',
@@ -25,8 +25,9 @@ var Article = Backbone.Model.extend({
     'tags': ''
   },
 
-  initialize: function() {
-    console.log('Here init article model');
+  initialize: function(options) {
+    this.url = this.url + options.id;
+    console.log('Here init article model ' + this.url);
   },
 
 });

@@ -34,7 +34,7 @@ class AdminController
     		}
 		}
 
-		throw new Exception("You cant load this action without xhr", 1);
+		throw new \Exception("You cant load this action without xhr", 1);
 
 	}
 
@@ -50,8 +50,24 @@ class AdminController
             }
         }
 
-        throw new Exception("You cant load this action without xhr", 1);
+        throw new \Exception("You cant load this action without xhr", 1);
 
+    }
+
+    /*** Article Edit ***/
+    public function getArticleAction(Request $request, Application $app)
+    {
+        if($request->isXmlHttpRequest())
+        {
+            if($request->getMethod() == 'GET')
+            {
+                $id = $request->attributes->get('id');
+                $article = $app['repository.article']->read( $id );
+                return $app->json( $article );
+            }
+        }
+
+        throw new \Exception("You cant load this action without xhr", 1);
     }
 
 }

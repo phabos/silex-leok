@@ -1,4 +1,6 @@
-/*******  App Logic  *******/
+/*******************************/
+/*******    App Logic    *******/
+/*******************************/
 var App = {
   help: function() {
     console.log("help");
@@ -14,7 +16,9 @@ var App = {
   }
 };
 
+/*******************************/
 /*******  Settings View  *******/
+/*******************************/
 var SettingsView = Backbone.View.extend({
   el: $("#main_content"),
 
@@ -69,8 +73,10 @@ var SettingsView = Backbone.View.extend({
 
 });
 
-/*******  Article View  *******/
-var ArtilcesView = Backbone.View.extend({
+/*******************************/
+/*******  Articles List  ********/
+/*******************************/
+var ArtilcesList = Backbone.View.extend({
   el: $("#main_content"),
 
   initialize: function(){
@@ -79,7 +85,7 @@ var ArtilcesView = Backbone.View.extend({
   },
 
   render: function(){
-    var template = _.template( $("#articles_template").html() );
+    var template = _.template( $("#articles_list_template").html() );
     var obj = this;
 
     this.articles.fetch({
@@ -91,7 +97,36 @@ var ArtilcesView = Backbone.View.extend({
 
 });
 
-/*******  Home View  *******/
+/*******************************/
+/*******  Article Edit  ********/
+/*******************************/
+var ArtilcesEdit = Backbone.View.extend({
+  el: $("#main_content"),
+
+  initialize: function(options){
+    console.log('article edit view init ' + options.id);
+    this.article = new Article({ id: options.id });
+    this.render();
+  },
+
+  render: function(){
+    var template = _.template( $("#articles_edit_template").html() );
+    var obj = this;
+
+    this.article.fetch({
+      success: function (article) {
+        obj.$el.html( template( { article: obj.article.toJSON() } ) );
+        var editor = new MediumEditor('.editable');
+      }
+    });
+
+  },
+
+});
+
+/*******************************/
+/*******    Home View    *******/
+/*******************************/
 var HomeView = Backbone.View.extend({
   el: $("#main_content"),
 
