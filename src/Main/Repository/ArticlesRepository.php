@@ -15,10 +15,10 @@ class ArticlesRepository
         $this->db = $db;
     }
 
-    public function update( $value )
+    public function update( $datas, $id )
     {
         // update article
-        //$this->db->executeUpdate( "UPDATE options SET value = ? WHERE name = 'settings'", array( $value ) );
+        $this->db->update( $this->table, $datas, array( 'id' => $id ) );
     }
 
     public function read( $id )

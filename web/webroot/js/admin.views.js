@@ -44,7 +44,7 @@ var SettingsView = Backbone.View.extend({
   },
 
   events: {
-    "click button.btn-primary": "saveSettings"
+    "click .settingsedit button.btn-primary": "saveSettings"
   },
 
   saveSettings: function( event ){
@@ -55,7 +55,7 @@ var SettingsView = Backbone.View.extend({
 
     this.xhr = true;
 
-    this.$el.find("input[data-field]").each(function(){
+    this.$el.find(".settingsedit input[data-field]").each(function(){
       obj.settings.set(this.getAttribute("data-field"), this.value);
     });
 
@@ -65,7 +65,7 @@ var SettingsView = Backbone.View.extend({
         obj.xhr = false;
       },
       error:function(err){
-        throw err;
+        alert( err );
       }
     });
 
@@ -109,6 +109,10 @@ var ArtilcesEdit = Backbone.View.extend({
     this.render();
   },
 
+  events: {
+    "click .articleedit button.btn-primary": "saveArticle"
+  },
+
   render: function(){
     var template = _.template( $("#articles_edit_template").html() );
     var obj = this;
@@ -117,10 +121,74 @@ var ArtilcesEdit = Backbone.View.extend({
       success: function (article) {
         obj.$el.html( template( { article: obj.article.toJSON() } ) );
         var editor = new MediumEditor('.editable');
+        obj.observeFileupload();
       }
     });
 
   },
+
+  observeFileupload: function() {
+    var obj = this;
+    var dropzone = document.getElementById("dropzone");
+      dropzone.ondragover = dropzone.ondragenter = function(event) {
+          event.stopPropagation();
+          event.preventDefault();
+      }
+
+      dropzone.ondrop = function(event) {
+          event.stopPropagation();
+          event.preventDefault();
+          App.animateResponse('Envoi en cours...');
+          var filesArray = event.dataTransfer.files;
+          for (var i=0; i<filesArray.length; i++) {
+              obj.sendFile(filesArray[i]);
+          }
+      }
+  },
+
+  sendFile: function (file) {
+    var obj = this;
+    var uri = "/admin/send-images";
+    var xhr = new XMLHttpRequest();
+    var fd = new FormData();
+
+    xhr.open("POST", uri, true);
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState == 4 && xhr.status == 200) {
+          // Handle response.
+          result = JSON.parse( xhr.responseText );
+          App.animateResponse( result.msg );
+          if( result.imageUrl != '' ) {
+            jQuery('#dropzone').attr({ src: result.imageUrl })
+          }
+          // update article image model
+          obj.article.set({ image: result.imageUrl });
+      }
+    };
+    fd.append('myFile', file);
+    // Initiate a multipart/form-data upload
+    xhr.send(fd);
+  },
+
+  saveArticle: function() {
+    var obj = this;
+    App.animateBtn();
+
+    this.$el.find(".articleedit input[data-field]").each(function(){
+      obj.article.set(this.getAttribute("data-field"), this.value);
+    });
+
+    this.article.set({ content: this.$el.find("div#postContent").html() });
+
+    this.article.save({},{
+      success:function(model, response){
+        App.animateResponse( 'Article mis à jour' );
+      },
+      error:function(err){
+        alert( err );
+      }
+    });
+  }
 
 });
 

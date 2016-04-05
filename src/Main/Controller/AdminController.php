@@ -21,7 +21,6 @@ class AdminController
 		{
     		if($request->getMethod() == 'POST')
     		{
-    			sleep(1);
                 $app['repository.options']->updateSettings( $request->getContent() );
 				return $app->json( array( 'success' => 'true', 'msg' => 'Settings mis à jour !' ) );
 			}
@@ -65,9 +64,36 @@ class AdminController
                 $article = $app['repository.article']->read( $id );
                 return $app->json( $article );
             }
+
+            if($request->getMethod() == 'PUT')
+            {
+                $id = $request->attributes->get('id');
+                $datas = @json_decode( $request->getContent(), true );
+                $app['repository.article']->update( $datas, $id );
+                return $app->json();
+            }
         }
 
         throw new \Exception("You cant load this action without xhr", 1);
+    }
+
+    /*** Send Images method ***/
+    public function sendImagesAction(Request $request, Application $app)
+    {
+        if($request->getMethod() == 'POST')
+        {
+
+
+            if (isset($_FILES['myFile'])) {
+                if( move_uploaded_file($_FILES['myFile']['tmp_name'], $app['upload.path'] . $_FILES['myFile']['name']) )
+                    return $app->json( array( 'imageUrl' => $app['webroot.path'] . $_FILES['myFile']['name'], 'msg' => 'Upload réussi' ) );
+                else
+                    return $app->json( array( 'imageUrl' => '', 'msg' => 'Something went bad :(' ) );
+                die();
+            }
+        }
+
+        throw new \Exception("You cant load this action without post", 1);
     }
 
 }

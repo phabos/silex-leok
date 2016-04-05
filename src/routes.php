@@ -19,11 +19,14 @@
   $app->get('/admin/articles', 'Main\Controller\AdminController::articlesAction')
       ->bind('adminarticles');
 
-  $app->get('/admin/article/{id}', 'Main\Controller\AdminController::getArticleAction')
+  $app->match('/admin/article/{id}', 'Main\Controller\AdminController::getArticleAction')
       ->convert('id', function ($id) use ($app) { if((int) $id){ return (int) $id; }});
 
   $app->match('/admin/settings', 'Main\Controller\AdminController::settingsAction')
       ->bind('adminsettings');
+
+  $app->match('/admin/send-images', 'Main\Controller\AdminController::sendImagesAction')
+      ->bind('adminsendimages');
 
 	$app->error(function (\Exception $e, $code) use ($app) {
 		if ($app['debug']) {

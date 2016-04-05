@@ -2,7 +2,7 @@
 <script type="text/template" id="settings_template">
   <h2><i class="fa fa-cogs"></i> Settings</h2>
   <div class="clearfix"></div>
-  <form>
+  <form class="settingsedit">
     <fieldset class="form-group">
       <label for="adminEmail">Email site</label>
       <input type="email" data-field="email" class="form-control" id="adminEmail" placeholder="Enter email" value="<%= settings.email %>">
@@ -52,27 +52,35 @@
   <div class="pull-right"><small><a href="#/articles"><i class="fa fa-share"></i> Retour à la liste des articles</a></small></div>
   <h2><i class="fa fa-paragraph"></i> Edition de l'article <%= article.id %></h2>
   <div class="clearfix"></div>
-  <form>
+  <form class="articleedit">
+    <fieldset class="form-group">
+      <% if ( article.image != null ) { %>
+        <img src="<%= article.image %>" id="dropzone" />
+      <% }else{ %>
+        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" id="dropzone" />
+      <% } %>
+      <!--small class="text-muted">Email utilisé pour les formulaires contact du site.</small-->
+    </fieldset>
     <fieldset class="form-group">
       <label for="postTitle">Titre du post</label>
-      <input type="text" data-field="postTitle" class="form-control" id="postTitle" placeholder="postTitle" value="<%= article.title %>">
+      <input type="text" data-field="title" class="form-control" id="postTitle" placeholder="postTitle" value="<%= article.title %>">
       <!--small class="text-muted">Email utilisé pour les formulaires contact du site.</small-->
     </fieldset>
     <fieldset class="form-group">
       <label for="postExcerpt">Extrait du post</label>
-      <input type="text" data-field="postTitle" class="form-control" id="postExcerpt" placeholder="postExcerpt" value="<%= article.excerpt %>">
+      <input type="text" data-field="excerpt" class="form-control" id="postExcerpt" placeholder="postExcerpt" value="<%= article.excerpt %>">
       <!--small class="text-muted">Email utilisé pour les formulaires contact du site.</small-->
     </fieldset>
     <fieldset class="form-group">
-      <label for="postExcerpt">Contenu du post</label>
-      <div class="editable form-control"><%= article.content %></div>
+      <label for="postContent">Contenu du post</label>
+      <div class="editable form-control" id="postContent"><%= article.content %></div>
     </fieldset>
     <fieldset class="form-group">
-      <label for="postExcerpt">Gallery</label>
+      <label for="postGallery">Gallery</label>
       <div><%= article.gallery %></div>
     </fieldset>
     <fieldset class="form-group">
-      <label for="postExcerpt">Tags</label>
+      <label for="postTags">Tags</label>
       <div><%= article.tags %></div>
     </fieldset>
     <button type="submit" class="btn btn-primary"><i class="fa fa-cog"></i> Enregistrer l'article</button>

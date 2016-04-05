@@ -18,6 +18,7 @@ var Article = Backbone.Model.extend({
 
   defaults: {
     'id': '',
+    'image':'',
     'title': '',
     'content': '',
     'excerpt': '',
