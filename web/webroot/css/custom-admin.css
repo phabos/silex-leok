@@ -1,7 +1,56 @@
 .editable {
     min-height: 300px;
 }
-#dropzone {
-    width:300px;
-    border:4px dashed grey;
+.dropzone {
+    width:150px;
+    height:150px;
+    border:3px dashed grey;
+    float: left;
+    position: relative;
+    color: grey;
+    text-align: center;
+    -webkit-transition: all 0.5s;
+    transition: all 0.5s;
 }
+.dropzone.drag-over {
+    color: #fff;
+    background-color: lightskyblue;
+    border:3px dashed #fff;
+}
+.dropzone i {
+    width: 100%;
+    margin-top: 10px;
+    font-size: 40px;
+}
+.dropzone span {
+    width: 100%;
+    display: block;
+    padding: 5px;
+    font-weight: bold;
+}
+.main-article-img-container {
+    margin: 0 0 0 15px;
+    float: left;
+}
+.main-article-img-container img {
+    height:150px;
+}
+.main-article-gal-container img {
+    height: 150px;
+    margin: 0 0 0 15px;
+    float: left;
+}
+.img-box {
+    position: relative;
+    float: left;
+}
+.img-box i {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 20px;
+    cursor:pointer;
+    color:#ff4c4c;
+}
+
+

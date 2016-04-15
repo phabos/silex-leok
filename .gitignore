@@ -3,3 +3,5 @@ config/*
 var/
 var/*
 var/logs/silex_dev.log
+web/webroot/gallery
+web/webroot/gallery/*

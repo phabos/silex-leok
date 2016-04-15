@@ -22,7 +22,7 @@ class AdminController
     		if($request->getMethod() == 'POST')
     		{
                 $app['repository.options']->updateSettings( $request->getContent() );
-				return $app->json( array( 'success' => 'true', 'msg' => 'Settings mis à jour !' ) );
+				return $app->json( array() );
 			}
 
 			if($request->getMethod() == 'GET')
@@ -62,6 +62,7 @@ class AdminController
             {
                 $id = $request->attributes->get('id');
                 $article = $app['repository.article']->read( $id );
+                $article['gallery'] = @json_decode( $article['gallery'] );
                 return $app->json( $article );
             }
 
@@ -69,6 +70,7 @@ class AdminController
             {
                 $id = $request->attributes->get('id');
                 $datas = @json_decode( $request->getContent(), true );
+                $datas['gallery'] = @json_encode( $datas['gallery'] );
                 $app['repository.article']->update( $datas, $id );
                 return $app->json();
             }
@@ -82,11 +84,20 @@ class AdminController
     {
         if($request->getMethod() == 'POST')
         {
-
-
             if (isset($_FILES['myFile'])) {
-                if( move_uploaded_file($_FILES['myFile']['tmp_name'], $app['upload.path'] . $_FILES['myFile']['name']) )
-                    return $app->json( array( 'imageUrl' => $app['webroot.path'] . $_FILES['myFile']['name'], 'msg' => 'Upload réussi' ) );
+                // Si le dossier image n'existe pas on le crée format -> m-Y
+                $currentDate = new \Datetime();
+                $uploadDir = $app['upload.path'] . $currentDate->format( 'm-Y' );
+                if( ! is_dir( $uploadDir ) ) {
+                  if ( mkdir( $uploadDir, 0775, true ) ) {
+                    chmod( $uploadDir, 0775 );
+                  }else{
+                    return $app->json( array( 'msg' => 'impossible to create upload folder' ) );
+                  }
+                }
+
+                if( move_uploaded_file($_FILES['myFile']['tmp_name'], $uploadDir . '/' . $_FILES['myFile']['name']) )
+                    return $app->json( array( 'imageUrl' => $app['webroot.path'] . $currentDate->format( 'm-Y' ) . '/' . $_FILES['myFile']['name'], 'msg' => 'Upload réussi' ) );
                 else
                     return $app->json( array( 'imageUrl' => '', 'msg' => 'Something went bad :(' ) );
                 die();

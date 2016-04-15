@@ -61,7 +61,7 @@ var SettingsView = Backbone.View.extend({
 
     this.settings.save({},{
       success:function(model, response){
-        App.animateResponse(response.msg);
+        App.animateResponse( 'Settings mis à jour' );
         obj.xhr = false;
       },
       error:function(err){
@@ -110,7 +110,8 @@ var ArtilcesEdit = Backbone.View.extend({
   },
 
   events: {
-    "click .articleedit button.btn-primary": "saveArticle"
+    "click .articleedit button.btn-primary": "saveArticle",
+    "click .img-delete": "deleteImg"
   },
 
   render: function(){
@@ -129,24 +130,35 @@ var ArtilcesEdit = Backbone.View.extend({
 
   observeFileupload: function() {
     var obj = this;
-    var dropzone = document.getElementById("dropzone");
-      dropzone.ondragover = dropzone.ondragenter = function(event) {
-          event.stopPropagation();
-          event.preventDefault();
-      }
+    var dropzone = jQuery(".dropzone");
 
-      dropzone.ondrop = function(event) {
-          event.stopPropagation();
-          event.preventDefault();
-          App.animateResponse('Envoi en cours...');
-          var filesArray = event.dataTransfer.files;
-          for (var i=0; i<filesArray.length; i++) {
-              obj.sendFile(filesArray[i]);
-          }
+    dropzone.on('dragenter', function(e){
+      e.preventDefault();
+    });
+
+    dropzone.bind('dragover', function(e){
+      e.preventDefault();
+      $(this).addClass('drag-over');
+    });
+
+    dropzone.bind('dragleave', function(e){
+      e.preventDefault();
+      $(this).removeClass('drag-over');
+    });
+
+    dropzone.on('drop', function(e){
+      var target = jQuery(e.target).parents( '.dropzone' ).attr('id');
+      e.stopPropagation();
+      e.preventDefault();
+      App.animateResponse('Envoi en cours...');
+      var filesArray = e.originalEvent.dataTransfer.files;
+      for (var i=0; i<filesArray.length; i++) {
+          obj.sendFile(filesArray[i], target);
       }
+    });
   },
 
-  sendFile: function (file) {
+  sendFile: function (file, target) {
     var obj = this;
     var uri = "/admin/send-images";
     var xhr = new XMLHttpRequest();
@@ -155,19 +167,38 @@ var ArtilcesEdit = Backbone.View.extend({
     xhr.open("POST", uri, true);
     xhr.onreadystatechange = function() {
       if (xhr.readyState == 4 && xhr.status == 200) {
-          // Handle response.
-          result = JSON.parse( xhr.responseText );
-          App.animateResponse( result.msg );
-          if( result.imageUrl != '' ) {
-            jQuery('#dropzone').attr({ src: result.imageUrl })
+        // Handle response.
+        result = JSON.parse( xhr.responseText );
+        App.animateResponse( result.msg );
+        if( result.imageUrl != '' ) {
+          if( target == 'dropzone' ) {
+            jQuery('#main-article-img').attr({ src: result.imageUrl });
+            // update article image model
+            obj.article.set({ image: result.imageUrl });
           }
-          // update article image model
-          obj.article.set({ image: result.imageUrl });
+          if( target == 'gal-dropzone' ) {
+            var gallery = obj.article.get('gallery');
+            jQuery('#main-article-gal-container').append( '<div class="img-box" data-count="' + gallery.length + '"><img src="' + result.imageUrl + '" /><i class="fa fa-trash-o img-delete" aria-hidden="true"></i></div>' );
+            gallery.push( result.imageUrl );
+            obj.article.set('gallery', gallery);
+          }
+        }
       }
     };
     fd.append('myFile', file);
     // Initiate a multipart/form-data upload
     xhr.send(fd);
+  },
+
+  deleteImg: function(e) {
+    var elt = jQuery(e.target).parents( '.img-box' );
+    if ( elt.data('count') > -1 ) {
+      var gallery = this.article.get('gallery');
+      //var index = array.indexOf(5);
+      gallery.splice( elt.data('count'), 1 );
+      this.article.set('gallery', gallery);
+      elt.remove();
+    }
   },
 
   saveArticle: function() {
