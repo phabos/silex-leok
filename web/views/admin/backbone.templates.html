@@ -90,7 +90,7 @@
       <div id="main-article-gal-container" class="main-article-gal-container">
         <% if ( article.gallery != null ) { %>
           <% _.each( article.gallery, function ( img, index ) { %>
-            <div class="img-box" data-count="<%= index %>"><img src="<%= img %>" /><i class="fa fa-trash-o img-delete" aria-hidden="true"></i></div>
+            <div class="img-box"><img src="<%= img %>" /><i class="fa fa-trash-o img-delete" aria-hidden="true"></i></div>
           <% }); %>
         <% } %>
       </div>

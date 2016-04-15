@@ -14,7 +14,6 @@ var Article = Backbone.Model.extend({
     this.url = this.url + options.id;
     console.log('Here init article model ' + this.url);
     this.on("change:gallery", function( model ){
-      console.log('change');
       if( model.get( 'gallery' ) == null ){
         model.set({ 'gallery': [] });
       }

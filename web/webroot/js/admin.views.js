@@ -192,12 +192,14 @@ var ArtilcesEdit = Backbone.View.extend({
 
   deleteImg: function(e) {
     var elt = jQuery(e.target).parents( '.img-box' );
-    if ( elt.data('count') > -1 ) {
-      var gallery = this.article.get('gallery');
-      //var index = array.indexOf(5);
-      gallery.splice( elt.data('count'), 1 );
+    var gallery = this.article.get('gallery');
+    var index = gallery.indexOf( elt.find( 'img' ).attr( 'src' ) );
+    if( index > -1 ) {
+      gallery.splice( index, 1 );
       this.article.set('gallery', gallery);
       elt.remove();
+    }else{
+      console.log( 'l image n existe pas !' );
     }
   },
 
