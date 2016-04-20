@@ -1,0 +1,21 @@
+<!-- Article template -->
+<script type="text/template" id="articles_list_template">
+  <table class="table table-condensed">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Title</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% _.each(articles, function (article) { %>
+        <tr>
+          <th scope="row"><%= article.id %></th>
+          <td><%= article.title %></td>
+          <td><a href="#/articleedit/<%= article.id %>"><i class="fa fa-pencil-square-o"></i></a></td>
+        </tr>
+      <% }); %>
+    </tbody>
+  </table>
+</script>

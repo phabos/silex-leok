@@ -15,14 +15,14 @@
     <div class="message" id="message"></div>
     <nav class="navbar navbar-light navbar-full navbar-fixed-top bg-faded">
       <ul class="nav navbar-nav">
-        <li class="nav-item active">
-          <a class="nav-link" href="#/">Home <span class="sr-only">(current)</span></a>
+        <li class="nav-item {% if current_page_name == 'adminindex' %}active{% endif %}">
+          <a class="nav-link" href="{{ path('adminindex') }}">Home</a>
         </li>
-        <li class="nav-item">
-        <a class="nav-link" href="#/articles">Articles</a>
+        <li class="nav-item {% if current_page_name == 'adminarticles' %}active{% endif %}">
+        <a class="nav-link" href="{{ path('adminarticles') }}">Articles</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#/settings">Settings</a>
+        <li class="nav-item {% if current_page_name == 'adminsettings' %}active{% endif %}">
+          <a class="nav-link" href="{{ path('adminsettings') }}">Settings</a>
         </li>
       </ul>
       <a class="navbar-brand pull-xs-right" href="#">FrenchKnit - Admin Dashboard</a>
@@ -30,3 +30,4 @@
     <div class="container-fluid">
      <div class="row">
        <div class="col-sm-12 main">
+        <div id="main_content"></div>

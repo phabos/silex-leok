@@ -33,7 +33,7 @@ class AdminController
     		}
 		}
 
-		throw new \Exception("You cant load this action without xhr", 1);
+		return $app['twig']->render( 'admin/backbone.settings.tpl.html', array() );
 
 	}
 

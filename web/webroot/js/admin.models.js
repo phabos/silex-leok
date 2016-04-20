@@ -1,11 +1,4 @@
-var Settings = Backbone.Model.extend({
-  urlRoot: '/admin/settings',
 
-  initialize: function() {
-    console.log('Here init settings model');
-  },
-
-});
 
 var Article = Backbone.Model.extend({
   url: '/admin/article/',

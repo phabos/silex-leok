@@ -1,77 +1,4 @@
-/*******************************/
-/*******    App Logic    *******/
-/*******************************/
-var App = {
-  help: function() {
-    console.log("help");
-  },
-  animateResponse: function(response) {
-    jQuery('#message').html(response);
-    $('#message').css({top: 80});
-    setTimeout(function(){ $('#message').css({top: -200}); }, 3000);
-    jQuery('.btn-primary i').removeClass('fa-spin');
-  },
-  animateBtn: function() {
-    jQuery('.btn-primary i').addClass('fa-spin');
-  }
-};
 
-/*******************************/
-/*******  Settings View  *******/
-/*******************************/
-var SettingsView = Backbone.View.extend({
-  el: $("#main_content"),
-
-  initialize: function(){
-    this.settings = new Settings;
-    this.render();
-    this.xhr = false;
-  },
-
-  render: function(){
-    var template = _.template( $("#settings_template").html() );
-    var obj = this;
-
-    // fetch settings && loading && pass to view
-    this.settings.fetch({
-      success: function (settings) {
-        obj.$el.html( template( { settings: obj.settings.toJSON() } ) );
-      }
-    });
-
-    //this.$el.html( template( this.settings.toJSON() ) );
-
-  },
-
-  events: {
-    "click .settingsedit button.btn-primary": "saveSettings"
-  },
-
-  saveSettings: function( event ){
-    var obj = this;
-    App.animateBtn();
-    if( this.xhr == true )
-      return;
-
-    this.xhr = true;
-
-    this.$el.find(".settingsedit input[data-field]").each(function(){
-      obj.settings.set(this.getAttribute("data-field"), this.value);
-    });
-
-    this.settings.save({},{
-      success:function(model, response){
-        App.animateResponse( 'Settings mis à jour' );
-        obj.xhr = false;
-      },
-      error:function(err){
-        alert( err );
-      }
-    });
-
-  }
-
-});
 
 /*******************************/
 /*******  Articles List  ********/
@@ -163,6 +90,8 @@ var ArtilcesEdit = Backbone.View.extend({
     var uri = "/admin/send-images";
     var xhr = new XMLHttpRequest();
     var fd = new FormData();
+
+    App.animateResponse( '<i class="fa fa-circle-o-notch fa-spin" aria-hidden="true"></i> Upload en cours' );
 
     xhr.open("POST", uri, true);
     xhr.onreadystatechange = function() {

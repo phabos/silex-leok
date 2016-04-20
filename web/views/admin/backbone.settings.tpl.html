@@ -1,0 +1,98 @@
+{% include 'admin/header.html' %}
+<!-- Settings template -->
+<script type="text/template" id="settings_template">
+  <h2><i class="fa fa-cogs"></i> Settings</h2>
+  <div class="clearfix"></div>
+  <form class="settingsedit">
+    <fieldset class="form-group">
+      <label for="adminEmail">Email site</label>
+      <input type="email" data-field="email" class="form-control" id="adminEmail" placeholder="Enter email" value="<%= settings.email %>">
+      <small class="text-muted">Email utilisé pour les formulaires contact du site.</small>
+    </fieldset>
+    <fieldset class="form-group">
+      <label for="titreSite">Site title</label>
+      <input type="text" data-field="title" class="form-control" id="titreSite" placeholder="Site title" value="<%= settings.title %>">
+    </fieldset>
+    <fieldset class="form-group">
+      <label for="sloganSite">Site slogan</label>
+      <input type="text" data-field="slogan" class="form-control" id="sloganSite" placeholder="Site slogan" value="<%= settings.slogan %>">
+    </fieldset>
+    <button type="submit" class="btn btn-primary"><i class="fa fa-cog"></i> Enregistrer les options</button>
+  </form>
+</script>
+{% include 'admin/scripts.html' %}
+<script>
+  /*******************************/
+  /*******  Settings View  *******/
+  /*******************************/
+  var SettingsView = Backbone.View.extend({
+    el: $("#main_content"),
+
+    initialize: function(){
+      this.settings = new Settings;
+      this.render();
+      this.xhr = false;
+    },
+
+    events: {
+      "click button.btn-primary": "saveSettings"
+    },
+
+    render: function(){
+      var obj = this;
+      var template = _.template( $("#settings_template").html() );
+
+      // fetch settings && loading && pass to view
+      this.settings.fetch({
+        success: function (settings) {
+          obj.$el.html( template( { settings: obj.settings.toJSON() } ) );
+        }
+      });
+
+      //this.$el.html( template( this.settings.toJSON() ) );
+
+    },
+
+    saveSettings: function( event ){
+      event.preventDefault();
+
+      var obj = this;
+      App.animateBtn();
+      if( this.xhr == true )
+        return;
+
+      this.xhr = true;
+
+      this.$el.find(".settingsedit input[data-field]").each(function(){
+        obj.settings.set(this.getAttribute("data-field"), this.value);
+      });
+
+      this.settings.save({},{
+        success:function(model, response){
+          App.animateResponse( 'Settings mis à jour' );
+          obj.xhr = false;
+        },
+        error:function(err){
+          alert( err );
+        }
+      });
+
+    }
+
+  });
+
+  /*******************************/
+  /*******  Settings Model  *******/
+  /*******************************/
+  var Settings = Backbone.Model.extend({
+    urlRoot: '/admin/settings',
+
+    initialize: function() {
+      console.log('Here init settings model');
+    },
+
+  });
+
+  var settings = new SettingsView;
+</script>
+{% include 'admin/footer.html' %}
