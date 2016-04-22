@@ -19,14 +19,22 @@
   $app->get('/admin/articles', 'Main\Controller\AdminController::articlesAction')
       ->bind('adminarticles');
 
-  $app->match('/admin/article/{id}', 'Main\Controller\AdminController::getArticleAction')
-      ->convert('id', function ($id) use ($app) { if((int) $id){ return (int) $id; }});
+  $app->match('/admin/article-edit/{id}', 'Main\Controller\AdminController::editArticleAction')
+      ->convert('id', function ($id) use ($app) { if((int) $id){ return (int) $id; }})
+      ->bind('adminarticlesedit');
+
+  $app->match('/admin/article-add', 'Main\Controller\AdminController::addArticleAction')
+      ->bind('adminarticlesadd');
+
+  $app->match('/admin/article-delete/{id}', 'Main\Controller\AdminController::deleteArticleAction')
+      ->convert('id', function ($id) use ($app) { if((int) $id){ return (int) $id; }})
+      ->bind('adminarticlesdelete');
 
   $app->match('/admin/settings', 'Main\Controller\AdminController::settingsAction')
       ->bind('adminsettings');
 
-  $app->match('/admin/send-images', 'Main\Controller\AdminController::sendImagesAction')
-      ->bind('adminsendimages');
+  $app->match('/admin/send-medias', 'Main\Controller\AdminController::sendMediasAction')
+      ->bind('adminsendmedias');
 
 	$app->error(function (\Exception $e, $code) use ($app) {
 		if ($app['debug']) {

@@ -29,17 +29,18 @@ class ArticlesRepository
 
     public function create()
     {
-        // create article
+        $this->db->insert( $this->table, array() );
+        return $this->db->lastInsertId();
     }
 
-    public function delete()
+    public function delete( $id )
     {
-        // delete article
+        $this->db->delete( $this->table, array( 'id' => $id ) );
     }
 
-    public function getArticles( $limit )
+    public function getArticles( $limit, $offset = 0 )
     {
-        return $this->db->fetchAll( "SELECT * FROM " . $this->table . " WHERE 1 LIMIT $limit", array() );
+        return $this->db->fetchAll( "SELECT * FROM " . $this->table . " WHERE 1 ORDER BY date_creation DESC LIMIT $offset, $limit", array() );
     }
 
 }

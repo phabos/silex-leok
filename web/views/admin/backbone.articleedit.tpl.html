@@ -1,6 +1,7 @@
+{% include 'admin/header.html' %}
 <!-- Article edit template -->
 <script type="text/template" id="articles_edit_template">
-  <div class="pull-right"><small><a href="#/articles"><i class="fa fa-share"></i> Retour à la liste des articles</a></small></div>
+  <div class="pull-right"><small><a href="{{path('adminarticles')}}"><i class="fa fa-share"></i> Retour à la liste des articles</a></small></div>
   <h2><i class="fa fa-paragraph"></i> Edition de l'article <%= article.id %></h2>
   <div class="clearfix"></div>
   <form class="articleedit">
@@ -53,11 +54,11 @@
         <i class="fa fa-plus" aria-hidden="true"></i>
         <span>Ajouter le pdf du patron</span>
       </div>
-      <div id="main-article-gal-container" class="main-article-gal-container">
-        <% if ( article.gallery != null ) { %>
-          <% _.each( article.gallery, function ( img, index ) { %>
-            <div class="img-box"><img src="<%= img %>" /><i class="fa fa-trash-o img-delete" aria-hidden="true"></i></div>
-          <% }); %>
+      <div id="main-article-pdf-container" class="main-article-img-container">
+        <% if ( article.pdf != null ) { %>
+          <a href="<%= article.pdf %>" target="_blank">
+            <i class="fa fa-file-o" aria-hidden="true"></i> PDF
+          </a> | <i class="fa fa-trash-o pdf-delete" aria-hidden="true"></i>
         <% } %>
       </div>
     </fieldset>
@@ -68,3 +69,171 @@
     <button type="submit" class="btn btn-primary"><i class="fa fa-cog"></i> Enregistrer l'article</button>
   </form>
 </script>
+{% include 'admin/scripts.html' %}
+<script>
+  /*******************************/
+  /*******  Article Edit  ********/
+  /*******************************/
+  var ArtilcesEdit = Backbone.View.extend({
+    el: $("#main_content"),
+
+    initialize: function(options){
+      console.log('article edit view init ' + options.id);
+      this.article = new Article({ id: options.id });
+      this.render();
+    },
+
+    events: {
+      "click .articleedit button.btn-primary": "saveArticle",
+      "click .img-delete": "deleteImg",
+      "click .pdf-delete": "deletePdf"
+    },
+
+    render: function(){
+      var template = _.template( $("#articles_edit_template").html() );
+      var obj = this;
+
+      this.article.fetch({
+        success: function (article) {
+          obj.$el.html( template( { article: obj.article.toJSON() } ) );
+          var editor = new MediumEditor('.editable');
+          obj.observeFileupload();
+        }
+      });
+
+    },
+
+    observeFileupload: function() {
+      var obj = this;
+      var dropzone = jQuery(".dropzone");
+
+      dropzone.on('dragenter', function(e){
+        e.preventDefault();
+      });
+
+      dropzone.bind('dragover', function(e){
+        e.preventDefault();
+        $(this).addClass('drag-over');
+      });
+
+      dropzone.bind('dragleave', function(e){
+        e.preventDefault();
+        $(this).removeClass('drag-over');
+      });
+
+      dropzone.on('drop', function(e){
+        var target = jQuery(e.target).parents( '.dropzone' ).attr('id');
+        e.stopPropagation();
+        e.preventDefault();
+        App.animateResponse('Envoi en cours...');
+        var filesArray = e.originalEvent.dataTransfer.files;
+        for (var i=0; i<filesArray.length; i++) {
+            obj.sendFile(filesArray[i], target);
+        }
+      });
+    },
+
+    sendFile: function (file, target) {
+      var obj = this;
+      var uri = "{{path('adminsendmedias')}}";
+      var xhr = new XMLHttpRequest();
+      var fd = new FormData();
+
+      App.animateResponse( '<i class="fa fa-circle-o-notch fa-spin" aria-hidden="true"></i> Upload en cours' );
+
+      xhr.open("POST", uri, true);
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+          // Handle response.
+          result = JSON.parse( xhr.responseText );
+          App.animateResponse( result.msg );
+          if( result.mediaUrl != '' ) {
+            if( target == 'dropzone' ) {
+              jQuery('#main-article-img').attr({ src: result.mediaUrl });
+              // update article image model
+              obj.article.set({ image: result.mediaUrl });
+            }
+            if( target == 'gal-dropzone' ) {
+              var gallery = obj.article.get('gallery');
+              jQuery('#main-article-gal-container').append( '<div class="img-box"><img src="' + result.mediaUrl + '" /><i class="fa fa-trash-o img-delete" aria-hidden="true"></i></div>' );
+              gallery.push( result.mediaUrl );
+              obj.article.set('gallery', gallery);
+            }
+            if( target == 'pdf-dropzone' ) {
+              jQuery('#main-article-pdf-container').html( '<a href="' + result.mediaUrl + '" target="_blank"> | <i class="fa fa-file-o" aria-hidden="true"></i> PDF</a> <i class="fa fa-trash-o pdf-delete" aria-hidden="true"></i>' );
+              obj.article.set({ pdf: result.mediaUrl });
+            }
+          }
+        }
+      };
+      fd.append('myFile', file);
+      // Initiate a multipart/form-data upload
+      xhr.send(fd);
+    },
+
+    deleteImg: function(e) {
+      e.preventDefault();
+      var elt = jQuery(e.target).parents( '.img-box' );
+      var gallery = this.article.get('gallery');
+      var index = gallery.indexOf( elt.find( 'img' ).attr( 'src' ) );
+      if( index > -1 ) {
+        gallery.splice( index, 1 );
+        this.article.set('gallery', gallery);
+        elt.remove();
+      }else{
+        console.log( 'l image n existe pas !' );
+      }
+    },
+
+    deletePdf: function(e) {
+      e.preventDefault();
+      this.article.set({ pdf: null });
+      jQuery('#main-article-pdf-container').html('');
+    },
+
+    saveArticle: function(e) {
+      e.preventDefault();
+      var obj = this;
+      App.animateBtn();
+
+      this.$el.find(".articleedit input[data-field]").each(function(){
+        obj.article.set(this.getAttribute("data-field"), this.value);
+      });
+
+      this.article.set({ content: this.$el.find("div#postContent").html() });
+
+      this.article.save({},{
+        success:function(model, response){
+          App.animateResponse( 'Article mis à jour' );
+        },
+        error:function(err){
+          alert( err );
+        }
+      });
+    }
+
+  });
+
+var Article = Backbone.Model.extend({
+    url: '/admin/article-edit/',
+
+    initialize: function(options) {
+      this.url = this.url + options.id;
+      console.log('Here init article model ' + this.url);
+      this.on("change:gallery", function( model ){
+        if( model.get( 'gallery' ) == null ){
+          model.set({ 'gallery': [] });
+        }
+      });
+
+      /*if( this.tags == null ){
+        this.set( 'tags', [] );
+      }*/
+    },
+
+  });
+
+  var article_edit = new ArtilcesEdit({ id: {{ id }} });
+
+</script>
+{% include 'admin/footer.html' %}

@@ -9,9 +9,11 @@ use Main\Repository\OptionsRepository;
 class AdminController
 {
 
+    protected static $articleLimit = 15;
+
 	public function indexAction(Request $request, Application $app)
 	{
-		return $app['twig']->render('admin/index.html', array());
+		return $app['twig']->render('admin/backbone.home.tpl.html', array());
     }
 
     /*** Settings page ***/
@@ -37,6 +39,15 @@ class AdminController
 
 	}
 
+    /*** delete article ***/
+    public function deleteArticleAction(Request $request, Application $app)
+    {
+        $id = $request->attributes->get('id');
+        $articles = $app['repository.article']->delete( $id );
+        return $app->redirect($app['url_generator']->generate('adminarticles'));
+
+    }
+
     /*** Articles page ***/
     public function articlesAction(Request $request, Application $app)
     {
@@ -44,17 +55,25 @@ class AdminController
         {
             if($request->getMethod() == 'GET')
             {
-                $articles = $app['repository.article']->getArticles( 15 );
+                $offset = (int) $request->query->get('offset') * self::$articleLimit;
+                $articles = $app['repository.article']->getArticles( self::$articleLimit, $offset );
                 return $app->json( $articles );
             }
         }
 
-        throw new \Exception("You cant load this action without xhr", 1);
+        return $app['twig']->render( 'admin/backbone.article.tpl.html', array() );
 
     }
 
+    /*** Article Edd ***/
+    public function addArticleAction(Request $request, Application $app)
+    {
+        $articleId = $app['repository.article']->create();
+        return $app->redirect($app['url_generator']->generate('adminarticlesedit', ['id' => $articleId]));
+    }
+
     /*** Article Edit ***/
-    public function getArticleAction(Request $request, Application $app)
+    public function editArticleAction(Request $request, Application $app)
     {
         if($request->isXmlHttpRequest())
         {
@@ -76,11 +95,11 @@ class AdminController
             }
         }
 
-        throw new \Exception("You cant load this action without xhr", 1);
+        return $app['twig']->render( 'admin/backbone.articleedit.tpl.html', array( 'id' => $request->attributes->get('id') ) );
     }
 
     /*** Send Images method ***/
-    public function sendImagesAction(Request $request, Application $app)
+    public function sendMediasAction(Request $request, Application $app)
     {
         if($request->getMethod() == 'POST')
         {
@@ -97,9 +116,9 @@ class AdminController
                 }
 
                 if( move_uploaded_file($_FILES['myFile']['tmp_name'], $uploadDir . '/' . $_FILES['myFile']['name']) )
-                    return $app->json( array( 'imageUrl' => $app['webroot.path'] . $currentDate->format( 'm-Y' ) . '/' . $_FILES['myFile']['name'], 'msg' => 'Upload réussi' ) );
+                    return $app->json( array( 'mediaUrl' => $app['webroot.path'] . $currentDate->format( 'm-Y' ) . '/' . $_FILES['myFile']['name'], 'msg' => 'Upload réussi' ) );
                 else
-                    return $app->json( array( 'imageUrl' => '', 'msg' => 'Something went bad :(' ) );
+                    return $app->json( array( 'mediaUrl' => '', 'msg' => 'Something went bad :(' ) );
                 die();
             }
         }
