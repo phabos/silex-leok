@@ -25,7 +25,19 @@
           <a class="nav-link" href="{{ path('adminsettings') }}">Settings</a>
         </li>
       </ul>
-      <a class="navbar-brand pull-xs-right" href="#">FrenchKnit - Admin Dashboard</a>
+      <ul class="nav navbar-nav pull-xs-right">
+        <li class="nav-item">
+          <a class="nav-link" href="{{ path( 'homepage' ) }}" title="Voir la home" target="_blank"><i class="fa fa-home" aria-hidden="true"></i></a>
+        </li>
+        {% if current_page_name == 'adminarticlesedit' %}
+          <li class="nav-item">
+            <a href="{{path('adminarticles')}}" class="nav-link"><i class="fa fa-share"></i> Retour à la liste des articles</a>
+          </li>
+        {% endif %}
+        <li class="nav-item">
+          <a href="{{ path('admin_logout') }}" class="nav-link"><i class="fa fa-sign-out" aria-hidden="true"></i></a>
+        </li>
+      </ul>
     </nav>
     <div class="container-fluid">
      <div class="row">

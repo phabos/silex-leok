@@ -43,4 +43,8 @@ class ArticlesRepository
         return $this->db->fetchAll( "SELECT * FROM " . $this->table . " WHERE 1 ORDER BY date_creation DESC LIMIT $offset, $limit", array() );
     }
 
+    public function countArticles() {
+        return $this->db->fetchAssoc( "SELECT count(*) as total FROM " . $this->table . " WHERE status=1", array() );
+    }
+
 }

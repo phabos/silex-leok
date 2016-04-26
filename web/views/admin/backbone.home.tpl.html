@@ -1,8 +1,33 @@
 {% include 'admin/header.html' %}
 <!-- Home template -->
 <script type="text/template" id="home_template">
-  Hello dude, Hello buddy :)
-  <a class="btn" href="/" target="_blank">Voir le site</a>
+  <h2>Hello dude, Hello buddy :)</h2>
+  <div class="clearfix"></div><br/>
+  <div class="row">
+    <div class="col-md-4">
+      <div class="box">
+        <h3>Site stat</h3>
+        <div class="clearfix"></div><br/>
+        Nb d'articles publiés : <span id="article_pub"></span>
+        <div class="clearfix"></div>
+        <a class="btn" href="/" target="_blank">Voir le site</a>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="box">
+        <h3>Weather today</h3>
+        <div class="clearfix"></div>
+        <i>Comming soon</i>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="box">
+        <h3>Google analytics</h3>
+        <div class="clearfix"></div>
+        <i>Comming soon</i>
+      </div>
+    </div>
+  </div>
 </script>
 {% include 'admin/scripts.html' %}
 <script>
@@ -21,6 +46,10 @@
         var template = _.template( $("#home_template").html() );
         // Load the compiled HTML into the Backbone "el"
         this.$el.html( template );
+
+        $.get( '{{ path("adminarticles") }}?count=1', function( data ) {
+          $( "#article_pub" ).html( data.total );
+        });
       },
 
     });

@@ -1,16 +1,49 @@
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:300&subset=latin,latin-ext);
+h1, h2, h3 {
+    font-family: 'Open Sans', sans-serif;
+}
+.box {
+    background-color: rgb(255, 255, 255);
+    padding: 15px;
+    border: 1px solid rgb(239, 239, 239);
+    height: 300px;
+    overflow: visible;
+}
+.table tbody tr:hover {
+    background-color: #fff !important;
+}
+.navbar {
+    font-family: 'Open Sans', sans-serif;
+    padding:1.5rem;
+}
+.bg-faded {
+    background-color:#3A94E0;
+}
+.bg-faded a {
+    color: #fff !important;
+    opacity: .5;
+    -webkit-transition: opacity .1s linear;
+}
+.bg-faded li.active a {
+    opacity: 1 !important;
+}
+.bg-faded a:hover {
+    opacity: 1;
+}
 .editable {
     min-height: 300px;
 }
 .dropzone {
     width:150px;
     height:150px;
-    border:3px dashed grey;
+    border:2px dashed grey;
     float: left;
     position: relative;
     color: grey;
     text-align: center;
     -webkit-transition: all 0.5s;
     transition: all 0.5s;
+    margin-bottom: 10px;
 }
 .dropzone.drag-over {
     color: #fff;
@@ -33,7 +66,7 @@
     float: left;
 }
 .main-article-img-container img {
-    height:150px;
+    height:110px;
 }
 .main-article-gal-container img {
     height: 150px;
@@ -43,6 +76,7 @@
 .img-box {
     position: relative;
     float: left;
+    margin-bottom: 10px;
 }
 i.fa-trash-o {
     cursor:pointer;

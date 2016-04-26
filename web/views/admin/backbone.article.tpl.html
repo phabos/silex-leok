@@ -1,7 +1,7 @@
 {% include 'admin/header.html' %}
 <!-- Article template -->
 <script type="text/template" id="articles_list_template">
-  <table class="table table-condensed">
+  <table class="table table-hover">
     <thead>
       <tr>
         <th>#</th>
@@ -64,8 +64,11 @@
       App.animateBtn();
       this.articles.fetch({
         data: $.param({ offset: this.offset}),
-        success: function(){
-          App.animateResponse('Articles chargés');
+        success: function( data ){
+          if(data.length == 0)
+            App.animateResponse('Aucun article supplémentaire :)');
+          else
+            App.animateResponse('Articles chargés');
         }
       });
       this.offset++;

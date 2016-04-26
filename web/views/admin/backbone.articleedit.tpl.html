@@ -1,73 +1,85 @@
 {% include 'admin/header.html' %}
 <!-- Article edit template -->
 <script type="text/template" id="articles_edit_template">
-  <div class="pull-right"><small><a href="{{path('adminarticles')}}"><i class="fa fa-share"></i> Retour à la liste des articles</a></small></div>
-  <h2><i class="fa fa-paragraph"></i> Edition de l'article <%= article.id %></h2>
-  <div class="clearfix"></div>
-  <form class="articleedit">
-    <fieldset class="form-group">
-      <div id="dropzone" class="dropzone">
-        <i class="fa fa-plus" aria-hidden="true"></i>
-        <span>Image principale</span>
+  <div class="row">
+    <form class="articleedit">
+    <div class="col-md-8">
+      <h2><i class="fa fa-paragraph"></i> Edition de l'article <%= article.id %></h2>
+      <div class="clearfix"></div><br/>
+        <fieldset class="form-group">
+          <label for="postTitle">Titre du post</label>
+          <input type="text" data-field="title" class="form-control" id="postTitle" placeholder="postTitle" value="<%= article.title %>">
+          <!--small class="text-muted">Email utilisé pour les formulaires contact du site.</small-->
+        </fieldset>
+        <fieldset class="form-group">
+          <label for="postExcerpt">Extrait du post</label>
+          <input type="text" data-field="excerpt" class="form-control" id="postExcerpt" placeholder="postExcerpt" value="<%= article.excerpt %>">
+          <!--small class="text-muted">Email utilisé pour les formulaires contact du site.</small-->
+        </fieldset>
+        <fieldset class="form-group">
+          <label for="postContent">Contenu du post</label>
+          <div class="editable form-control" id="postContent"><%= article.content %></div>
+        </fieldset>
+        <fieldset class="form-group">
+          <label for="postGallery">Galerie</label>
+          <div class="clear"></div>
+          <div id="gal-dropzone" class="dropzone">
+            <i class="fa fa-plus" aria-hidden="true"></i>
+            <span>Galerie</span>
+          </div>
+          <div id="main-article-gal-container" class="main-article-gal-container">
+            <% if ( article.gallery != null ) { %>
+              <% _.each( article.gallery, function ( img, index ) { %>
+                <div class="img-box"><img src="<%= img %>" /><i class="fa fa-trash-o img-delete" aria-hidden="true"></i></div>
+              <% }); %>
+            <% } %>
+          </div>
+        </fieldset>
       </div>
-      <div id="main-article-img-container" class="main-article-img-container">
-        <% if ( article.image != null ) { %>
-          <img src="<%= article.image %>" id="main-article-img" />
-        <% }else{ %>
-          <img src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" id="main-article-img" />
-        <% } %>
+      <div class="col-md-4">
+        <div class="clearfix"></div><br/>
+        <button type="submit" class="btn btn-primary"><i class="fa fa-cog"></i> Enregistrer l'article</button>
+        <div class="clearfix"></div><br/>
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" <% if ( article.status > 0 ) { %>checked<% } %> id="publish"> Publié ?
+          </label>
+        </div>
+        <fieldset class="form-group">
+          <div id="dropzone" class="dropzone">
+            <i class="fa fa-plus" aria-hidden="true"></i>
+            <span>Image principale</span>
+          </div>
+          <div id="main-article-img-container" class="main-article-img-container">
+            <% if ( article.image != null ) { %>
+              <img src="<%= article.image %>" id="main-article-img" />
+            <% }else{ %>
+              <img src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" id="main-article-img" />
+            <% } %>
+          </div>
+        </fieldset>
+        <fieldset class="form-group">
+          <label for="postGallery">PDF</label>
+          <div class="clear"></div>
+          <div id="pdf-dropzone" class="dropzone">
+            <i class="fa fa-plus" aria-hidden="true"></i>
+            <span>PDF du patron</span>
+          </div>
+          <div id="main-article-pdf-container" class="main-article-img-container">
+            <% if ( article.pdf != null ) { %>
+              <a href="<%= article.pdf %>" target="_blank">
+                <i class="fa fa-file-o" aria-hidden="true"></i> PDF
+              </a> | <i class="fa fa-trash-o pdf-delete" aria-hidden="true"></i>
+            <% } %>
+          </div>
+        </fieldset>
+        <fieldset class="form-group">
+          <label for="postTags">Tags</label>
+          <div><%= article.tags %></div>
+        </fieldset>
       </div>
-    </fieldset>
-    <fieldset class="form-group">
-      <label for="postTitle">Titre du post</label>
-      <input type="text" data-field="title" class="form-control" id="postTitle" placeholder="postTitle" value="<%= article.title %>">
-      <!--small class="text-muted">Email utilisé pour les formulaires contact du site.</small-->
-    </fieldset>
-    <fieldset class="form-group">
-      <label for="postExcerpt">Extrait du post</label>
-      <input type="text" data-field="excerpt" class="form-control" id="postExcerpt" placeholder="postExcerpt" value="<%= article.excerpt %>">
-      <!--small class="text-muted">Email utilisé pour les formulaires contact du site.</small-->
-    </fieldset>
-    <fieldset class="form-group">
-      <label for="postContent">Contenu du post</label>
-      <div class="editable form-control" id="postContent"><%= article.content %></div>
-    </fieldset>
-    <fieldset class="form-group">
-      <label for="postGallery">Galerie</label>
-      <div class="clear"></div>
-      <div id="gal-dropzone" class="dropzone">
-        <i class="fa fa-plus" aria-hidden="true"></i>
-        <span>Galerie</span>
-      </div>
-      <div id="main-article-gal-container" class="main-article-gal-container">
-        <% if ( article.gallery != null ) { %>
-          <% _.each( article.gallery, function ( img, index ) { %>
-            <div class="img-box"><img src="<%= img %>" /><i class="fa fa-trash-o img-delete" aria-hidden="true"></i></div>
-          <% }); %>
-        <% } %>
-      </div>
-    </fieldset>
-    <fieldset class="form-group">
-      <label for="postGallery">PDF</label>
-      <div class="clear"></div>
-      <div id="pdf-dropzone" class="dropzone">
-        <i class="fa fa-plus" aria-hidden="true"></i>
-        <span>PDF du patron</span>
-      </div>
-      <div id="main-article-pdf-container" class="main-article-img-container">
-        <% if ( article.pdf != null ) { %>
-          <a href="<%= article.pdf %>" target="_blank">
-            <i class="fa fa-file-o" aria-hidden="true"></i> PDF
-          </a> | <i class="fa fa-trash-o pdf-delete" aria-hidden="true"></i>
-        <% } %>
-      </div>
-    </fieldset>
-    <fieldset class="form-group">
-      <label for="postTags">Tags</label>
-      <div><%= article.tags %></div>
-    </fieldset>
-    <button type="submit" class="btn btn-primary"><i class="fa fa-cog"></i> Enregistrer l'article</button>
-  </form>
+    </form>
+  </div>
 </script>
 {% include 'admin/scripts.html' %}
 <script>
@@ -98,9 +110,18 @@
           obj.$el.html( template( { article: obj.article.toJSON() } ) );
           var editor = new MediumEditor('.editable');
           obj.observeFileupload();
+          obj.observeCheckboxState();
         }
       });
 
+    },
+
+    observeCheckboxState: function() {
+      var obj=this;
+      jQuery("#publish").bind('change', function() {
+        val = this.checked;
+        obj.article.set({ status: val });
+      });
     },
 
     observeFileupload: function() {
