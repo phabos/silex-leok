@@ -62,6 +62,12 @@ class AdminController
                     return $app->json( $count );
                 }
 
+                if( !empty( $request->query->get('search') ) )
+                {
+                    $articles = $app['repository.article']->searchArticles( $request->query->get('search') );
+                    return $app->json( $articles );
+                }
+
                 $offset = (int) $request->query->get('offset') * self::$articleLimit;
                 $articles = $app['repository.article']->getArticles( self::$articleLimit, $offset );
                 return $app->json( $articles );

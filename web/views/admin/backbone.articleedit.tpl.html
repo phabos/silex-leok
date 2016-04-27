@@ -1,11 +1,11 @@
 {% include 'admin/header.html' %}
 <!-- Article edit template -->
 <script type="text/template" id="articles_edit_template">
+  <h2><i class="fa fa-paragraph"></i> Edition de l'article <%= article.id %></h2>
+  <div class="clearfix"></div><br/>
   <div class="row">
     <form class="articleedit">
     <div class="col-md-8">
-      <h2><i class="fa fa-paragraph"></i> Edition de l'article <%= article.id %></h2>
-      <div class="clearfix"></div><br/>
         <fieldset class="form-group">
           <label for="postTitle">Titre du post</label>
           <input type="text" data-field="title" class="form-control" id="postTitle" placeholder="postTitle" value="<%= article.title %>">

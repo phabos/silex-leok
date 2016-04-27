@@ -4,20 +4,26 @@
   <h2><i class="fa fa-cogs"></i> Settings</h2>
   <div class="clearfix"></div><br/>
   <form class="settingsedit">
-    <fieldset class="form-group">
-      <label for="adminEmail">Email site</label>
-      <input type="email" data-field="email" class="form-control" id="adminEmail" placeholder="Enter email" value="<%= settings.email %>">
-      <small class="text-muted">Email utilisé pour les formulaires contact du site.</small>
-    </fieldset>
-    <fieldset class="form-group">
-      <label for="titreSite">Site title</label>
-      <input type="text" data-field="title" class="form-control" id="titreSite" placeholder="Site title" value="<%= settings.title %>">
-    </fieldset>
-    <fieldset class="form-group">
-      <label for="sloganSite">Site slogan</label>
-      <input type="text" data-field="slogan" class="form-control" id="sloganSite" placeholder="Site slogan" value="<%= settings.slogan %>">
-    </fieldset>
-    <button type="submit" class="btn btn-primary"><i class="fa fa-cog"></i> Enregistrer les options</button>
+  <div class="row">
+    <div class="col-md-8">
+      <fieldset class="form-group">
+        <label for="adminEmail">Email site</label>
+        <input type="email" data-field="email" class="form-control" id="adminEmail" placeholder="Enter email" value="<%= settings.email %>">
+        <small class="text-muted">Email utilisé pour les formulaires contact du site.</small>
+      </fieldset>
+      <fieldset class="form-group">
+        <label for="titreSite">Site title</label>
+        <input type="text" data-field="title" class="form-control" id="titreSite" placeholder="Site title" value="<%= settings.title %>">
+      </fieldset>
+      <fieldset class="form-group">
+        <label for="sloganSite">Site slogan</label>
+        <input type="text" data-field="slogan" class="form-control" id="sloganSite" placeholder="Site slogan" value="<%= settings.slogan %>">
+      </fieldset>
+    </div>
+    <div class="col-md-4">
+      <button type="submit" class="btn btn-primary"><i class="fa fa-cog"></i> Sauvegarder</button>
+    </div>
+  </div>
   </form>
 </script>
 {% include 'admin/scripts.html' %}

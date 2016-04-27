@@ -1,34 +1,46 @@
 {% include 'admin/header.html' %}
 <!-- Article template -->
 <script type="text/template" id="articles_list_template">
-  <table class="table table-hover">
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>Title</th>
-        <th>Date</th>
-        <th>Status</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% _.each(articles, function (article) { %>
-        <tr>
-          <th scope="row"><%= article.id %></th>
-          <td><%= article.title %></td>
-          <td><%= article.date_creation %></td>
-          <td><% if( article.status ){ %>publié<% }else{ %>En attente<% } %></td>
-          <td><a href="/admin/article-edit/<%= article.id %>"><i class="fa fa-pencil-square-o"></i></a> | <a href="/admin/article-delete/<%= article.id %>" class="delete"><i class="fa fa-trash" aria-hidden="true"></i></a></td>
-        </tr>
-      <% }); %>
-    </tbody>
-  </table>
-  <div class="clearfix"></div>
-  <div class="pull-left">
-    <a href="{{ path( 'adminarticles' ) }}" class="btn btn-primary"><i class="fa fa-circle-o-notch" aria-hidden="true"></i> Older posts</a>
+  <h2>Liste des articles</h2>
+  <div class="clearfix"></div><br/>
+  <div class="form-inline search">
+    <button class="btn btn-default pull-right btn-search"><i class="fa fa-search" aria-hidden="true"></i></button>
+    <input type="text" class="form-control pull-right" value="<%=query%>" placeholder="Rechercher un article" id="search_for" />
+    <div class="clearfix"></div>
   </div>
-  <div class="pull-right">
-    <a href="{{ path( 'adminarticlesadd' ) }}" class="btn"><i class="fa fa-plus" aria-hidden="true"></i> Nouvel article</a>
+  <div class="clearfix"></div><br/>
+  <div class="row">
+    <div class="col-md-10">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Title</th>
+            <th>Date</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% _.each(articles, function (article) { %>
+            <tr>
+              <th scope="row"><%= article.id %></th>
+              <td><%= article.title %></td>
+              <td><%= article.date_creation %></td>
+              <td><% if( article.status ){ %>publié<% }else{ %>En attente<% } %></td>
+              <td><a href="/admin/article-edit/<%= article.id %>"><i class="fa fa-pencil-square-o"></i></a> | <a href="/admin/article-delete/<%= article.id %>" class="delete"><i class="fa fa-trash" aria-hidden="true"></i></a></td>
+            </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </div>
+    <div class="col-md-2">
+      <div class="pull-center">
+        <a href="{{ path( 'adminarticles' ) }}" class="btn btn-primary more"><i class="fa fa-circle-o-notch" aria-hidden="true"></i> Older posts</a>
+        <div class="cleafix"></div><br/>
+        <a href="{{ path( 'adminarticlesadd' ) }}" class="btn"><i class="fa fa-plus" aria-hidden="true"></i> Nouvel article</a>
+      </div>
+    </div>
   </div>
   <div class="clearfix"></div>
 </script>
@@ -43,16 +55,35 @@
 
     initialize: function(){
       this.articles = new Articles;
+      this.query = '';
       this.loadArticles();
       _.bindAll( this, 'render' );
-      this.articles.bind( 'change', this.render );
-      this.articles.bind( 'add', this.render );
+      this.articles.on( 'change', this.render );
+      this.articles.on( 'remove', this.render );
+      this.articles.on( 'add', this.render );
       this.render();
     },
 
     events: {
       "click a.delete": "confirmDelete",
-      "click .pull-left .btn-primary": "loadArticlesEvent"
+      "click .pull-center .more": "loadArticlesEvent",
+      "click .btn-search": "searchArticle"
+    },
+
+    searchArticle:function(event) {
+      event.preventDefault();
+      this.offset = 0;
+      this.query = jQuery('#search_for').val();
+      this.articles.fetch({
+        data: $.param({ search: jQuery('#search_for').val() }),
+        success: function( data ){
+          if(data.length == 0)
+            App.animateResponse('Aucun article trouvé :(');
+          else
+            App.animateResponse('Articles chargés');
+        }
+      });
+
     },
 
     loadArticlesEvent:function(event) {
@@ -61,13 +92,14 @@
     },
 
     loadArticles: function() {
+      var obj = this;
       App.animateBtn();
       this.articles.fetch({
         data: $.param({ offset: this.offset}),
         success: function( data ){
           if(data.length == 0)
             App.animateResponse('Aucun article supplémentaire :)');
-          else
+          else if(obj.offset > 1)
             App.animateResponse('Articles chargés');
         }
       });
@@ -82,7 +114,7 @@
 
     render: function(){
       var template = _.template( $("#articles_list_template").html() );
-      this.$el.html( template( { articles: this.articles.toJSON() } ) );
+      this.$el.html( template( { articles: this.articles.toJSON(), query: this.query } ) );
     },
 
   });

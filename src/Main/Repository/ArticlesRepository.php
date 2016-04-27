@@ -47,4 +47,7 @@ class ArticlesRepository
         return $this->db->fetchAssoc( "SELECT count(*) as total FROM " . $this->table . " WHERE status=1", array() );
     }
 
+    public function searchArticles( $search = '' ) {
+        return $this->db->fetchAll( "SELECT * FROM " . $this->table . " WHERE title LIKE ?", array( '%' . $search . '%' ) );
+    }
 }

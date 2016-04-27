@@ -2,12 +2,36 @@
 h1, h2, h3 {
     font-family: 'Open Sans', sans-serif;
 }
+.search {
+    width: 100%;
+    margin-bottom: 20px;
+}
+.search input {
+    border-radius: 0;
+    border-bottom-width: 2px;
+    border-right-width: 0px;
+    border-left-width: 0px;
+    border-top-width: 0px;
+    background-color: transparent;
+    width: 40% !important;
+}
+.search button {
+    background-color: transparent;
+}
 .box {
     background-color: rgb(255, 255, 255);
     padding: 15px;
     border: 1px solid rgb(239, 239, 239);
     height: 300px;
     overflow: visible;
+}
+footer{
+    font-family: 'Open Sans', sans-serif;
+    color:#D3D3D3;
+    font-size: 12px;
+    padding: 1%;
+    width: 100%;
+    text-align: right;
 }
 .table tbody tr:hover {
     background-color: #fff !important;
