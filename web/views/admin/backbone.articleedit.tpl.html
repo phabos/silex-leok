@@ -143,13 +143,18 @@
       });
 
       dropzone.on('drop', function(e){
-        var target = jQuery(e.target).parents( '.dropzone' ).attr('id');
+        var target = jQuery(this).attr('id');
         e.stopPropagation();
         e.preventDefault();
         App.animateResponse('Envoi en cours...');
         var filesArray = e.originalEvent.dataTransfer.files;
         for (var i=0; i<filesArray.length; i++) {
-            obj.sendFile(filesArray[i], target);
+          //console.log('size ' + filesArray[i].size);
+          if( filesArray[i].size > 5000000 ) {
+            App.animateResponse('Fichier trop volumineux !');
+            return;
+          }
+          obj.sendFile(filesArray[i], target);
         }
       });
     },

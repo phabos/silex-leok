@@ -131,7 +131,11 @@ class AdminController
 
                 if( move_uploaded_file( $_FILES['myFile']['tmp_name'], $uploadDir . '/' . $_FILES['myFile']['name'] ) )
                 {
-                    $this->cropAndResizePhoto( $_FILES['myFile']['name'], $uploadDir );
+                    if( preg_match( '(\.png|\.jpg|\.jpeg|\.gif)', $_FILES['myFile']['name'] ) )
+                    {
+                        $this->cropAndResizePhoto( $_FILES['myFile']['name'], $uploadDir );
+                    }
+
                     return $app->json( array( 'mediaUrl' => $this->getUploadPath( $app['webroot.path'] ) . '/' . $_FILES['myFile']['name'], 'msg' => 'Upload réussi' ) );
                 }else{
                     return $app->json( array( 'mediaUrl' => '', 'msg' => 'Something went bad :(' ) );

@@ -4,8 +4,9 @@
   <h2>Liste des articles</h2>
   <div class="clearfix"></div><br/>
   <div class="form-inline search">
-    <button class="btn btn-default pull-right btn-search"><i class="fa fa-search" aria-hidden="true"></i></button>
-    <input type="text" class="form-control pull-right" value="<%=query%>" placeholder="Rechercher un article" id="search_for" />
+    <input type="text" class="form-control pull-left" value="<%=query%>" placeholder="Rechercher un article" id="search_for" />
+    <button class="btn btn-default pull-left btn-search"><i class="fa fa-search" aria-hidden="true"></i></button>
+    <button class="btn btn-default pull-left btn-refresh"><i class="fa fa-refresh" aria-hidden="true"></i></button>
     <div class="clearfix"></div>
   </div>
   <div class="clearfix"></div><br/>
@@ -67,7 +68,15 @@
     events: {
       "click a.delete": "confirmDelete",
       "click .pull-center .more": "loadArticlesEvent",
-      "click .btn-search": "searchArticle"
+      "click .btn-search": "searchArticle",
+      "click .btn-refresh": "searchRefresh"
+    },
+
+    searchRefresh:function(event) {
+      event.preventDefault();
+      this.offset = 0;
+      this.query = '';
+      this.loadArticles();
     },
 
     searchArticle:function(event) {
