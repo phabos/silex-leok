@@ -1,13 +1,13 @@
 <section class="grid">
-    <a class="grid__item fade" ng-repeat="article in articles" ng-click="loadDetailArticle('{*article.articleId*}', '{*article.pos*}')" id="grid_item_{*article.articleId*}">
+    <a class="grid__item fade" ng-repeat="article in articles" ng-click="loadDetailArticle('{*article.id*}', '{*article.pos*}')" id="grid_item_{*article.id*}">
     <div class="padding-title">
         <h2 class="title title--preview">{*article.title*}</h2>
         <div class="loader"></div>
-        <span class="category">{*article.description*}</span>
+        <span class="category">{*article.excerpt*}</span>
     </div>
     <div class="meta meta--preview">
-        <img class="meta__avatar" ng-src="{*article.smallthumb*}" />
-        <span class="meta__date"><i class="fa fa-calendar-o"></i> {*article.date*}</span>
+        <img class="meta__avatar" ng-src="{*article.image_thumb*}" />
+        <span class="meta__date"><i class="fa fa-calendar-o"></i> {*article.date_creation*}</span>
         <!--span class="meta__reading-time"><i class="fa fa-clock-o"></i> 3 min read</span-->
     </div>
     </a>
@@ -19,14 +19,14 @@
 
 <section class="content">
     <div class="scroll-wrap">
-        <article class="content__item" id="grid_article_{*article.articleId*}" ng-repeat="article in articles" id="{*article.articleId*}">
+        <article class="content__item" id="grid_article_{*article.id*}" ng-repeat="article in articles" id="{*article.id*}">
             <span class="category category--full">{* article.tags *}</span>
             <h2 class="title title--full">{* article.title *}</h2>
-            <div class="meta meta--full" ng-style="{'background-image':'url(\'{*article.bigthumb*}\')'}">
-                <span class="meta__date"><i class="fa fa-calendar-o"></i> {* article.date *}</span>
+            <div class="meta meta--full" ng-style="{'background-image':'url(\'{*article.image*}\')'}">
+                <span class="meta__date"><i class="fa fa-calendar-o"></i> {* article.date_creation *}</span>
             </div>
             <p ng-bind-html="article.content"></p>
-            <p class="acenter mgtop" ng-if="article.pattern"><a target="_blank" href="{* article.pattern *}"><i class="fa fa-chevron-circle-right"></i>&nbsp;&nbsp;Télécharger le pattern</a></p>
+            <p class="acenter mgtop" ng-if="article.pdf"><a target="_blank" href="{* article.pdf*}"><i class="fa fa-chevron-circle-right"></i>&nbsp;&nbsp;Télécharger le pattern</a></p>
             <div class="carousel-container" ng-if="article.gallery">
                 <ul rn-carousel class="image" rn-carousel-controls>
                     <li ng-repeat="image in article.gallery track by $index">

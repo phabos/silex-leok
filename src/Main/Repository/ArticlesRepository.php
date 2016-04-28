@@ -50,4 +50,8 @@ class ArticlesRepository
     public function searchArticles( $search = '' ) {
         return $this->db->fetchAll( "SELECT * FROM " . $this->table . " WHERE title LIKE ?", array( '%' . $search . '%' ) );
     }
+
+    public function getPublishedArticles( $limit, $offset = 0 ) {
+        return $this->db->fetchAll( "SELECT * FROM " . $this->table . " WHERE status=1 ORDER BY date_creation DESC LIMIT $offset, $limit", array() );
+    }
 }

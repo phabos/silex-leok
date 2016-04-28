@@ -4,13 +4,10 @@ namespace Main\Controller;
 
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
-use Main\Repository\OptionsRepository;
 use Main\Lib\ImageManipulator;
 
 class AdminController
 {
-
-    protected static $articleLimit = 15;
 
 	public function indexAction(Request $request, Application $app)
 	{
@@ -68,8 +65,8 @@ class AdminController
                     return $app->json( $articles );
                 }
 
-                $offset = (int) $request->query->get('offset') * self::$articleLimit;
-                $articles = $app['repository.article']->getArticles( self::$articleLimit, $offset );
+                $offset = (int) $request->query->get('offset') * $app['sql.limit'];
+                $articles = $app['repository.article']->getArticles( $app['sql.limit'], $offset );
                 return $app->json( $articles );
             }
         }
