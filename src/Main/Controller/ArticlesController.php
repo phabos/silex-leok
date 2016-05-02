@@ -2,6 +2,7 @@
 
 namespace Main\Controller;
 use Silex\Application;
+use Main\Events\UploadEvent;
 use Symfony\Component\HttpFoundation\Request;
 
 class ArticlesController
@@ -27,6 +28,7 @@ class ArticlesController
             $articles[$key]['gallery'] = @json_decode( $articles[$key]['gallery'] );
             $pos++;
         }
+
         return $app->json( $articles );
     }
 

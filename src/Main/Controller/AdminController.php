@@ -3,8 +3,8 @@
 namespace Main\Controller;
 
 use Silex\Application;
+use Main\Events\UploadEvent;
 use Symfony\Component\HttpFoundation\Request;
-use Main\Lib\ImageManipulator;
 
 class AdminController
 {
@@ -115,60 +115,17 @@ class AdminController
         {
             if (isset($_FILES['myFile']))
             {
-                $uploadDir = $this->getUploadDir( $app['upload.path'] );
-                if( ! is_dir( $uploadDir ) )
-                {
-                  if ( mkdir( $uploadDir, 0775, true ) )
-                  {
-                    chmod( $uploadDir, 0775 );
-                  }else{
-                    return $app->json( array( 'msg' => 'impossible to create upload folder' ) );
-                  }
-                }
-
-                if( move_uploaded_file( $_FILES['myFile']['tmp_name'], $uploadDir . '/' . $_FILES['myFile']['name'] ) )
-                {
-                    if( preg_match( '(\.png|\.jpg|\.jpeg|\.gif)', $_FILES['myFile']['name'] ) )
-                    {
-                        $this->cropAndResizePhoto( $_FILES['myFile']['name'], $uploadDir );
-                    }
-
-                    return $app->json( array( 'mediaUrl' => $this->getUploadPath( $app['webroot.path'] ) . '/' . $_FILES['myFile']['name'], 'msg' => 'Upload réussi' ) );
-                }else{
-                    return $app->json( array( 'mediaUrl' => '', 'msg' => 'Something went bad :(' ) );
-                }
-                die();
+                $event = new UploadEvent();
+                $event->setFileTmpName( $_FILES['myFile']['tmp_name'] );
+                $event->setFileName( $_FILES['myFile']['name'] );
+                $event->setUploadDir( $app['upload.path'] );
+                $event->setUploadPath( $app['webroot.path'] );
+                $res = $app['notifyService']->dispatch( UploadEvent::FILE_UPLOAD, $event );
+                return $app->json( $res->getResponse() );
             }
         }
 
         throw new \Exception("You cant load this action without post", 1);
-    }
-
-    private function cropAndResizePhoto( $photoPath, $uploadDir )
-    {
-        $manipulator = new ImageManipulator( $uploadDir . '/' . $photoPath );
-        $min = min($manipulator->getWidth(), $manipulator->getHeight());
-        $x1 = $y1 = 0;
-        $x2 = $y2 = $min;
-        $manipulator->crop($x1, $y1, $x2, $y2);
-        $manipulator->resample(500, 500, true);
-        $manipulator->save($uploadDir . '/' . 'R_500x500-' . $photoPath);
-    }
-
-    private function getUploadDir( $root )
-    {
-        // Si le dossier image n'existe pas on le crée format -> m-Y
-        $currentDate = new \Datetime();
-        $uploadDir = $root . $currentDate->format( 'm-Y' );
-        return $uploadDir;
-    }
-
-    private function getUploadPath( $root )
-    {
-        // Si le dossier image n'existe pas on le crée format -> m-Y
-        $currentDate = new \Datetime();
-        $uploadPath = $root . $currentDate->format( 'm-Y' );
-        return $uploadPath;
     }
 
 }

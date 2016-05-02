@@ -26,6 +26,12 @@
 
 	$app->register(new Silex\Provider\DoctrineServiceProvider());
 
+	$app['notifyService'] = $app->share(function() use ($app) {
+	   $dispatcher = new Symfony\Component\EventDispatcher\EventDispatcher();
+	   $dispatcher->addListener( 'main_upload.after_file_upload', 'Main\Events\UploaderListener::CropAndResizeAction' );
+	   return $dispatcher;
+	});
+
 	/***************** REPO ********************/
 
 	$app['repository.options'] = $app->share(function ($app) {
