@@ -76,6 +76,10 @@ button:focus {
   font-weight: normal;
 }
 
+.carousel-container {
+  margin-top: 20px;
+}
+
 .sidebar a {
   color:#333;
   position: relative;

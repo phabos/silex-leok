@@ -24,6 +24,7 @@ class ArticlesController
             $articles[$key]['image'] = $value['image'];
             $articles[$key]['image_thumb'] = $this->getImageThumbUrl( $app['webroot.path'], $value['image'] );
             $articles[$key]['pos'] = $pos;
+            $articles[$key]['gallery'] = @json_decode( $articles[$key]['gallery'] );
             $pos++;
         }
         return $app->json( $articles );
