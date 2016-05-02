@@ -28,7 +28,7 @@
               <th scope="row"><%= article.id %></th>
               <td><%= article.title %></td>
               <td><%= article.date_creation %></td>
-              <td><% if( article.status ){ %>publié<% }else{ %>En attente<% } %></td>
+              <td><% if( article.status == 0 ){ %>En attente<% }else{ %>Publié<% } %></td>
               <td><a href="/admin/article-edit/<%= article.id %>"><i class="fa fa-pencil-square-o"></i></a> | <a href="/admin/article-delete/<%= article.id %>" class="delete"><i class="fa fa-trash" aria-hidden="true"></i></a></td>
             </tr>
           <% }); %>

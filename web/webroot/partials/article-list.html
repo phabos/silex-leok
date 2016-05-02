@@ -3,7 +3,8 @@
     <div class="padding-title">
         <h2 class="title title--preview">{*article.title*}</h2>
         <div class="loader"></div>
-        <span class="category">{*article.excerpt*}</span>
+        <span class="category" ng-if="article.excerpt">{*article.excerpt*}</span>
+        <span class="category" ng-if="!article.excerpt">&nbsp;</span>
     </div>
     <div class="meta meta--preview">
         <img class="meta__avatar" ng-src="{*article.image_thumb*}" />
@@ -25,8 +26,12 @@
             <div class="meta meta--full" ng-style="{'background-image':'url(\'{*article.image*}\')'}">
                 <span class="meta__date"><i class="fa fa-calendar-o"></i> {* article.date_creation *}</span>
             </div>
-            <p ng-bind-html="article.content"></p>
-            <p class="acenter mgtop" ng-if="article.pdf"><a target="_blank" href="{* article.pdf*}"><i class="fa fa-chevron-circle-right"></i>&nbsp;&nbsp;Télécharger le pattern</a></p>
+            <div ng-bind-html="article.content" class="content-text"></div>
+            <div class="acenter mgtop" ng-if="article.pdf">
+                <a target="_blank" href="{* article.pdf*}" class="pdf">
+                    <i class="fa fa-chevron-circle-right"></i>&nbsp;&nbsp;Télécharger le pattern
+                </a>
+            </div>
             <div class="carousel-container" ng-if="article.gallery">
                 <ul rn-carousel class="image" rn-carousel-controls>
                     <li ng-repeat="image in article.gallery track by $index">

@@ -14,6 +14,7 @@ class ArticlesController
 
     public function articlesListAction( Application $app, Request $request )
     {
+        sleep(1);
         $offset = (int) $request->query->get('offset') * $app['sql.limit'];
         $articles = $app['repository.article']->getPublishedArticles( $app['sql.limit'], $offset );
         $pos = 0;
