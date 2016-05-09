@@ -19,17 +19,26 @@
     <script type="text/javascript" src="{{ base_url }}webroot/js/modernizr.custom.js?ver=1.0.0"></script>
     <script type="text/javascript" src="{{ base_url }}webroot/js/jquery.arctext.js?ver=1.0.0"></script>
     <script type="text/javascript" src="{{ base_url }}webroot/js/custom.js?ver=1.0.0"></script>
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+      ga('create', {% if website_env == 'prod' %}'UA-46820880-2'{% else %}'UA-46820880-3'{% endif %}, 'auto');
+      ga('send', 'pageview');
+    </script>
 	</head>
 	<body ng-app="leoKnitApp">
 		<div class="container">
       	<button id="menu-toggle" class="menu-toggle"><span>Menu</span></button>
   		<div id="theSidebar" class="sidebar">
   			<button class="close-button fa fa-fw fa-close"></button>
-  			<h1 id="header1">French Knit</h1>
+  			<h1 id="header1">{{options.title}}</h1>
   			<div class="svg-container">
   				<img src="{{ base_url }}webroot/img/logo.jpg" />
   			</div>
-  			<h1 id="header2">Le Knit c'est chic</h1>
+  			<h1 id="header2">{{options.slogan}}</h1>
   			<div class="clearfix"></div>
   			<div class="contact">
   				<a href="#/" class="text">Home</a>

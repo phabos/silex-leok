@@ -628,8 +628,8 @@ article h2 {
 }
 
 .grid__item .meta--preview .meta__avatar {
-  transition: 1s filter linear;
-  -webkit-transition: 1s -webkit-filter linear;
+  transition: 0.2s filter linear;
+  -webkit-transition: 0.2s -webkit-filter linear;
 }
 
 .grid__item:hover .meta--preview .meta__avatar,

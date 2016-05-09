@@ -10,7 +10,9 @@ class ArticlesController
 
     public function indexAction( Application $app )
     {
-    	return $app['twig']->render( 'main.html', array() );
+        $opts = $app['repository.options']->getSettings();
+        $options = @json_decode($opts['value']);
+    	return $app['twig']->render( 'main.html', array( 'options' => $options ) );
     }
 
     public function articlesListAction( Application $app, Request $request )

@@ -20,8 +20,9 @@
 	$app->register(new Silex\Provider\SessionServiceProvider());
 
 	$app->before(function (Symfony\Component\HttpFoundation\Request $request, Silex\Application $app) {
-    $app['twig']->addGlobal( 'current_page_name', $request->get( "_route" ) );
-    $app['twig']->addGlobal( 'base_url', $app['base.url'] );
+    	$app['twig']->addGlobal( 'current_page_name', $request->get( "_route" ) );
+    	$app['twig']->addGlobal( 'base_url', $app['base.url'] );
+		$app['twig']->addGlobal( 'website_env', getenv( 'WEBSITE_ENV' ) );
 	});
 
 	$app->register(new Silex\Provider\DoctrineServiceProvider());
