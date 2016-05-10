@@ -28,40 +28,49 @@ app.config(['$routeProvider',
     }
 ]);
 /******** ARTICLE CONTROLLER ********/
-app.controller('ArticleCtrl', function($scope, $http, $routeParams, getHttp, mainDomain, animateArticle) {
+app.controller('ArticleCtrl', function($scope, $http, $routeParams, getHttp, mainDomain, animateArticle, GA) {
     $scope.pageClass = 'page-home';
     $scope.offset = 0;
     $scope.showMore = 0;
     $scope.showNoMore = 0;
+
     // More article button
     $scope.loadMoreArticles = function() {
-            grabMoreArticle();
-        }
-        // Global functio to get the article
+        grabMoreArticle();
+        GA.trackEvent( 'click', 'article', 'load more' );
+    }
+
+    // Global functio to get the article
     var grabMoreArticle = function() {
-            $scope.showMore = 0;
-            getHttp.httpRequest(mainDomain.name + '/api/article.json/?offset=' + $scope.offset).success(function(data, status, headers, config) {
-                if (data.length > 0) {
-                    $scope.showMore = 1;
-                } else {
-                    $scope.showMore = 0;
-                }
-                if (data.length == 0) {
-                    $scope.showNoMore = 1;
-                }
-                if (angular.isUndefined($scope.articles)) $scope.articles = [];
-                $scope.articles = $scope.articles.concat(data);
-            });
-            $scope.offset++;
-        }
-        // Fire when controller is called
+        $scope.showMore = 0;
+        getHttp.httpRequest(mainDomain.name + '/api/article.json/?offset=' + $scope.offset).success(function(data, status, headers, config) {
+            if (data.length > 0) {
+                $scope.showMore = 1;
+            } else {
+                $scope.showMore = 0;
+            }
+            if (data.length == 0) {
+                $scope.showNoMore = 1;
+            }
+            if (angular.isUndefined($scope.articles)) $scope.articles = [];
+            $scope.articles = $scope.articles.concat(data);
+        });
+        $scope.offset++;
+    }
+
+    // Fire when controller is called
     grabMoreArticle();
+
     $scope.loadDetailArticle = function(elt, pos) {
+        if( this.article.title.length && this.article.id.length )
+            GA.trackEvent( 'click', 'article', 'detail ' + this.article.title + '#' + this.article.id );
         animateArticle.beforeLoadContent(elt, pos);
     }
+
     $scope.hideContent = function() {
         animateArticle.hideContent();
     }
+
     /*$scope.$on("$locationChangeStart", function(event) {
         var elt = jQuery('#grid_item_' + event.targetScope.$id);
         animateArticle.beforeShowDetail(elt);
@@ -276,6 +285,25 @@ app.factory('mainDomain', function($location) {
     return {
         name: $location.protocol() + "://" + $location.host()
     };
+});
+app.factory('GA', function() {
+    this.trackEvent = function(action, category, label) {
+        //category = article
+        //action = click
+        //label = more articles
+        var category = category.trim();
+        var label    = label.trim();
+
+        if(category.length > 0 && label.length > 0) {
+            ga('send', {
+                hitType: 'event',
+                eventCategory: category,
+                eventAction: action,
+                eventLabel: label
+            });
+        }
+    }
+    return this;
 });
 /* formulaire inscription newsletter */
 /*tfjassApp.controller('contactFormController', function($scope, gethttp) {
