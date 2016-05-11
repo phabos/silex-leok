@@ -28,7 +28,7 @@
             </div>
             <div ng-bind-html="article.content" class="content-text"></div>
             <div class="acenter mgtop" ng-if="article.pdf">
-                <a target="_blank" href="{* article.pdf*}" class="pdf">
+                <a target="_blank" href="{* article.pdf*}" class="pdf" ng-click="trackPDF()">
                     <i class="fa fa-chevron-circle-right"></i>&nbsp;&nbsp;Télécharger le pattern
                 </a>
             </div>

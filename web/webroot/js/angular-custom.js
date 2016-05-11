@@ -67,6 +67,11 @@ app.controller('ArticleCtrl', function($scope, $http, $routeParams, getHttp, mai
         animateArticle.beforeLoadContent(elt, pos);
     }
 
+    $scope.trackPDF = function() {
+        if(this.$parent.article.id)
+            GA.trackEvent( 'click', 'article', 'download PDF article#' + this.$parent.article.id );
+    }
+
     $scope.hideContent = function() {
         animateArticle.hideContent();
     }
