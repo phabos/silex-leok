@@ -6,3 +6,8 @@ var/logs/silex_dev.log
 web/webroot/gallery
 web/webroot/gallery/*
 vendor/*
+shipitfile.js
+upload/
+upload/*
+node_modules/
+node_modules/*

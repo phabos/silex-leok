@@ -1,0 +1,24 @@
+{
+  "name": "silex-leok",
+  "version": "1.0.0",
+  "description": "",
+  "main": "shipitfile.js",
+  "dependencies": {
+    "commander": "^2.9.0",
+    "shipit-deploy": "^2.1.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/phabos/silex-leok.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/phabos/silex-leok/issues"
+  },
+  "homepage": "https://github.com/phabos/silex-leok#readme"
+}
