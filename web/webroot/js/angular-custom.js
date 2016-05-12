@@ -68,8 +68,9 @@ app.controller('ArticleCtrl', function($scope, $http, $routeParams, getHttp, mai
     }
 
     $scope.trackPDF = function() {
-        if(this.$parent.article.id)
+        if(this.$parent.article.id) {
             GA.trackEvent( 'click', 'article', 'download PDF article#' + this.$parent.article.id );
+        }
     }
 
     $scope.hideContent = function() {
