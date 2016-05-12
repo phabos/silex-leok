@@ -26,6 +26,14 @@ app.config(['$routeProvider',
         });
     }
 ]);
+/******** CHECK FOR ROUTE CHANGE FOR THE MENU ********/
+app.run(function($rootScope) {
+    $rootScope.$on("$locationChangeStart", function(event, next, current) {
+        if( document.getElementById('theSidebar').classList.contains('sidebar--open') ){
+            document.getElementById('theSidebar').classList.remove('sidebar--open')
+        }
+    });
+});
 /******** ARTICLE DETAIL CONTROLLER ********/
 app.controller('ArticleDetailCtrl', function($scope, $http, $routeParams, getHttp, mainDomain, animateArticle, GA) {
     $scope.error = 0;
