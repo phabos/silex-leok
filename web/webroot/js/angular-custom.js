@@ -20,13 +20,32 @@ app.config(['$routeProvider',
         }).when('/contact', {
             templateUrl: '/webroot/partials/contact-form.html',
             controller: 'ContactCtrl'
+        }).when('/article/:id/:name', {
+            templateUrl: '/webroot/partials/article-detail.html',
+            controller: 'ArticleDetailCtrl'
         });
-        /*.
-              otherwise({
-                redirectTo: '/phones'
-              });*/
     }
 ]);
+/******** ARTICLE DETAIL CONTROLLER ********/
+app.controller('ArticleDetailCtrl', function($scope, $http, $routeParams, getHttp, mainDomain, animateArticle, GA) {
+    $scope.error = 0;
+    getHttp.httpRequest(mainDomain.name + '/api/article.json/?id=' + $routeParams.id).success(function(data, status, headers, config) {
+        console.log(data);
+        if(data == false) {
+            $scope.error = 1;
+        } else {
+            $scope.article = data;
+            document.getElementById('grid_article_elt').classList.add('content__item--show');
+            document.getElementById('theGrid').querySelector('section.content').style.overflow = 'auto';
+        }
+    });
+
+    $scope.trackPDF = function() {
+        if(this.$parent.article.id) {
+            GA.trackEvent( 'click', 'article', 'download PDF article#' + this.$parent.article.id );
+        }
+    }
+});
 /******** ARTICLE CONTROLLER ********/
 app.controller('ArticleCtrl', function($scope, $http, $routeParams, getHttp, mainDomain, animateArticle, GA) {
     $scope.pageClass = 'page-home';

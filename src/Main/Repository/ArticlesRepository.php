@@ -54,4 +54,5 @@ class ArticlesRepository
     public function getPublishedArticles( $limit, $offset = 0 ) {
         return $this->db->fetchAll( "SELECT * FROM " . $this->table . " WHERE status=1 ORDER BY date_creation DESC LIMIT $offset, $limit", array() );
     }
+
 }

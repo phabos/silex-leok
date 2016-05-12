@@ -1,13 +1,17 @@
-<section class="content">
-    <div class="scroll-wrap">
-        <article class="content__item" id="{*article.articleId*}">
+<section class="content content--show">
+    <div class="article-detail">
+        <article class="content__item" id="grid_article_elt" id="{*article.id*}">
             <span class="category category--full">{* article.tags *}</span>
             <h2 class="title title--full">{* article.title *}</h2>
-            <div class="meta meta--full" ng-style="{'background-image':'url(\'{*article.bigthumb*}\')'}">
-                <span class="meta__date"><i class="fa fa-calendar-o"></i> {{ article.date }}</span>
+            <div class="meta meta--full" style="background-image:url('{*article.image*}')">
+                <span class="meta__date"><i class="fa fa-calendar-o"></i> {* article.date_creation *}</span>
             </div>
-            <p ng-bind-html="article.content"></p>
-            <p class="acenter mgtop" ng-if="article.pattern"><a target="_blank" href="{* article.pattern *}"><i class="fa fa-chevron-circle-right"></i>&nbsp;&nbsp;Télécharger le pattern</a></p>
+            <div ng-bind-html="article.content" class="content-text"></div>
+            <div class="acenter mgtop" ng-if="article.pdf">
+                <a target="_blank" href="{* article.pdf*}" class="pdf" ng-click="trackPDF()">
+                    <i class="fa fa-chevron-circle-right"></i>&nbsp;&nbsp;Télécharger le pattern
+                </a>
+            </div>
             <div class="carousel-container" ng-if="article.gallery">
                 <ul rn-carousel class="image" rn-carousel-controls>
                     <li ng-repeat="image in article.gallery track by $index">
@@ -17,6 +21,10 @@
             </div>
             <div class="clearfix"></div>
         </article>
+        <article class="content__item-page" ng-if="error">
+            <h2>Error, no article here</h2>
+            <a href="#/">Retour à l'accueil</a>
+        </article>
     </div>
-    <a class="close-button" href="#/"><i class="fa fa-close"></i><span>Close</span></a>
+    <a class="close-button" ng-click="hideContent()"><i class="fa fa-close"></i><span>Close</span></a>
 </section>

@@ -173,6 +173,7 @@ a.disclaimer {
   font-weight: normal;
 }
 
+.content-normal h2,
 article h2 {
     margin: 0.75em 0 0;
     font-size: 2em;
@@ -803,7 +804,7 @@ article h2 {
   pointer-events: none;
   font-size: 0.85em;
 }
-.content__item-form{
+.content__item-page{
   padding: 60px 60px 80px 60px;
   pointer-events: none;
   font-size: 0.85em;

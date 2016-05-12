@@ -18,6 +18,22 @@ class ArticlesController
     public function articlesListAction( Application $app, Request $request )
     {
         sleep(1);
+
+        // Single article ?
+        if( ! empty( $request->query->get('id') ) ) {
+            $article = $app['repository.article']->read( (int) $request->query->get('id') );
+
+            if( !empty( $article ) ) {
+                $date_creation = new \Datetime( $article['date_creation'] );
+                $article['date_creation'] = $date_creation->format( 'd-m-Y' );
+                $article['image_thumb'] = $this->getImageThumbUrl( $app['webroot.path'], $article['image'] );
+                $article['gallery'] = @json_decode( $article['gallery'] );
+            }
+
+            return $app->json( $article );
+        }
+
+        // Multiples articles
         $offset = (int) $request->query->get('offset') * $app['sql.limit'];
         $articles = $app['repository.article']->getPublishedArticles( $app['sql.limit'], $offset );
         $pos = 0;
