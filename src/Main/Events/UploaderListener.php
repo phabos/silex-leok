@@ -11,7 +11,7 @@ class UploaderListener
     {
 
         $uploadDir = self::getUploadDir( $event->getUploadDir() );
-        error_log( 'Path : ' . $uploadDir . ' ' . `whoami` );
+        //error_log( 'Path : ' . $uploadDir . ' ' . `whoami` );
         if( ! is_dir( $uploadDir ) )
         {
             if ( mkdir( $uploadDir, 0775, true ) )
