@@ -2,6 +2,9 @@
 <IfModule mod_rewrite.c>
     Options -MultiViews
 
+    RewriteCond %{HTTP_HOST} ^frenchknit\.fr
+    RewriteRule (.*) http://www.frenchknit.fr/$1 [R=301,L]
+
     RewriteEngine On
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [QSA,L]
