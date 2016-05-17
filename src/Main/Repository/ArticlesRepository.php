@@ -29,7 +29,8 @@ class ArticlesRepository
 
     public function create()
     {
-        $this->db->insert( $this->table, array() );
+        $created = new \Datetime();
+        $this->db->insert( $this->table, array( 'date_creation' => $created->format('Y-m-d H:i:s') ) );
         return $this->db->lastInsertId();
     }
 
