@@ -14,14 +14,14 @@ class OptionsRepository
         $this->db = $db;
     }
 
-    public function updateSettings( $value )
+    public function updateSettings( $value, $name )
     {
-        $this->db->executeUpdate( "UPDATE options SET value = ? WHERE name = 'settings'", array( $value ) );
+        $this->db->executeUpdate( "UPDATE options SET value = :value WHERE name = :name", array( 'value' => $value, 'name' => $name ) );
     }
 
-    public function getSettings()
+    public function getSettings( $name )
     {
-        return $this->db->fetchAssoc( "SELECT value FROM options WHERE name = 'settings'" );
+        return $this->db->fetchAssoc( "SELECT value FROM options WHERE name = :name", array( 'name' => $name ) );
     }
 
 }

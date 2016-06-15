@@ -4,7 +4,7 @@
   use Symfony\Component\HttpFoundation\Request;
   use Silex\Application;
 
-	$app->get('/', 'Main\Controller\ArticlesController::indexAction')
+  $app->get('/', 'Main\Controller\ArticlesController::indexAction')
 	    ->bind('homepage');
 
   $app->get('/api/article.json/', 'Main\Controller\ArticlesController::articlesListAction')
@@ -15,6 +15,9 @@
 
   $app->get('/admin', 'Main\Controller\AdminController::indexAction')
       ->bind('adminindex');
+
+  $app->get('/admin/weather', 'Main\Controller\AdminController::weatherAction')
+      ->bind('adminweather');
 
   $app->get('/admin/articles', 'Main\Controller\AdminController::articlesAction')
       ->bind('adminarticles');
@@ -36,7 +39,7 @@
   $app->match('/admin/send-medias', 'Main\Controller\AdminController::sendMediasAction')
       ->bind('adminsendmedias');
 
-	$app->error(function (\Exception $e, $code) use ($app) {
+  $app->error(function (\Exception $e, $code) use ($app) {
 		if ($app['debug']) {
 			return;
 		}

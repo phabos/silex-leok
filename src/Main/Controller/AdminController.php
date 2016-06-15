@@ -5,6 +5,7 @@ namespace Main\Controller;
 use Silex\Application;
 use Main\Events\UploadEvent;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class AdminController
 {
@@ -21,13 +22,13 @@ class AdminController
 		{
     		if($request->getMethod() == 'POST')
     		{
-                $app['repository.options']->updateSettings( $request->getContent() );
+                $app['repository.options']->updateSettings( $request->getContent(), 'settings' );
 				return $app->json( array() );
 			}
 
 			if($request->getMethod() == 'GET')
     		{
-                $_settings = $app['repository.options']->getSettings();
+                $_settings = $app['repository.options']->getSettings( 'settings' );
     			$settings = @json_decode( $_settings['value'], true );
                 return $app->json( $settings );
     		}
@@ -36,6 +37,46 @@ class AdminController
 		return $app['twig']->render( 'admin/backbone.settings.tpl.html', array() );
 
 	}
+
+    /*** Weather ***/
+    public function weatherAction(Application $app)
+    {
+        $dbWeather = $app['repository.options']->getSettings( 'weather' );
+        if( isset( $dbWeather['value'] ) ) {
+            $w = @json_decode( $dbWeather['value'] );
+            if( isset( $w->expire ) && $w->expire > date( 'Y-m-d' ) ) {
+                // API Call
+                return new Response($this->getWeatherApi( $app ), 200);
+            } else {
+                return new Response($dbWeather['value'], 200);
+            }
+        }
+
+        return new Response($this->getWeatherApi( $app ), 200);
+
+    }
+
+    /*** Get current weather from api ***/
+    private function getWeatherApi( $app )
+    {
+        $client = new \GuzzleHttp\Client();
+        $apiWeather = $client->request('GET', 'http://api.openweathermap.org/data/2.5/weather',
+            [
+                'query' => [
+                    'q' => 'Paris,fr',
+                    'appid' => $app['weather.app']
+                ]
+            ]
+        );
+        // Surcharge la réponse
+        $res = @json_decode( $apiWeather->getBody() );
+        $res->expire = date( 'Y-m-d' );
+
+        // Store res
+        $app['repository.options']->updateSettings( $res, 'weather' );
+
+        return @json_encode( $res );
+    }
 
     /*** delete article ***/
     public function deleteArticleAction(Request $request, Application $app)

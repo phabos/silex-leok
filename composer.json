@@ -5,7 +5,8 @@
         "symfony/twig-bridge": "^3.0",
         "monolog/monolog": "^1.17",
         "symfony/security": "^3.0",
-        "doctrine/dbal": "~2.2"
+        "doctrine/dbal": "~2.2",
+        "guzzlehttp/guzzle": "^6.2"
     },
     "autoload": {
   		"psr-0": {"Main": "src/"}
