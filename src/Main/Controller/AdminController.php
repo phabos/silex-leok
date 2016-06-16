@@ -41,18 +41,21 @@ class AdminController
     /*** Weather ***/
     public function weatherAction(Application $app)
     {
+        $response = new Response();
+        $response->headers->set('Content-Type', 'application/json');
+
         $dbWeather = $app['repository.options']->getSettings( 'weather' );
         if( isset( $dbWeather['value'] ) ) {
             $w = @json_decode( $dbWeather['value'] );
-            if( isset( $w->expire ) && $w->expire > date( 'Y-m-d' ) ) {
+            if( isset( $w->expire ) && date( 'Y-m-d' ) > $w->expire ) {
                 // API Call
-                return new Response($this->getWeatherApi( $app ), 200);
+                return $response->setContent( $this->getWeatherApi( $app ) );
             } else {
-                return new Response($dbWeather['value'], 200);
+                return $response->setContent( $dbWeather['value'] );
             }
         }
 
-        return new Response($this->getWeatherApi( $app ), 200);
+        return $response->setContent( $this->getWeatherApi( $app ) );
 
     }
 
@@ -64,16 +67,18 @@ class AdminController
             [
                 'query' => [
                     'q' => 'Paris,fr',
-                    'appid' => $app['weather.app']
+                    'appid' => $app['weather.app'],
+                    'units' => 'metric'
                 ]
             ]
         );
+
         // Surcharge la réponse
         $res = @json_decode( $apiWeather->getBody() );
         $res->expire = date( 'Y-m-d' );
 
         // Store res
-        $app['repository.options']->updateSettings( $res, 'weather' );
+        $app['repository.options']->updateSettings( @json_encode( $res ), 'weather' );
 
         return @json_encode( $res );
     }

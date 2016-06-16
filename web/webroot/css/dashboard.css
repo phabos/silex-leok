@@ -127,3 +127,13 @@ body {
   margin: 0 auto;
   text-align: center;
 }
+
+#weather img {
+    float: left;
+    width: 50px;
+    margin-right: 15px;
+}
+
+#weather span.info {
+    float: left;
+}

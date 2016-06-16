@@ -8,7 +8,7 @@
       <div class="box">
         <h3>Site stat</h3>
         <div class="clearfix"></div><br/>
-        Nb d'articles publiés : <span id="article_pub"></span>
+        Nb d'articles publiés : <span id="article_pub">...</span>
         <div class="clearfix"></div>
         <a class="btn" href="/" target="_blank">Voir le site</a>
       </div>
@@ -16,14 +16,14 @@
     <div class="col-md-4">
       <div class="box">
         <h3>Weather today</h3>
-        <div class="clearfix"></div>
-        <i>Comming soon</i>
+        <div class="clearfix"></div><br/>
+        <span id="weather">...</span>
       </div>
     </div>
     <div class="col-md-4">
       <div class="box">
         <h3>Google analytics</h3>
-        <div class="clearfix"></div>
+        <div class="clearfix"></div><br/>
         <i>Comming soon</i>
       </div>
     </div>
@@ -49,6 +49,11 @@
 
         $.get( '{{ path("adminarticles") }}?count=1', function( data ) {
           $( "#article_pub" ).html( data.total );
+        });
+
+        $.get( '{{ path("adminweather") }}', function( data ) {
+          var src = data.weather[0].main;
+          $( "#weather" ).html( '<img src="http://openweathermap.org/img/w/' + data.weather[0].icon + '.png"/><span class="info">Today weather is ' + data.weather[0].main + '<br/>' + data.weather[0].description + '<br/>Max: ' + data.main.temp_max + '°C<br/>Min: ' + data.main.temp_min + '°C</span>' );
         });
       },
 
