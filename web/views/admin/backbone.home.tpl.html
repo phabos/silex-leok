@@ -53,7 +53,7 @@
 
         $.get( '{{ path("adminweather") }}', function( data ) {
           var src = data.weather[0].main;
-          $( "#weather" ).html( '<img src="http://openweathermap.org/img/w/' + data.weather[0].icon + '.png"/><span class="info">Today weather is ' + data.weather[0].main + '<br/>' + data.weather[0].description + '<br/>Max: ' + data.main.temp_max + '°C<br/>Min: ' + data.main.temp_min + '°C</span>' );
+          $( "#weather" ).html( '<img src="http://openweathermap.org/img/w/' + data.weather[0].icon + '.png"/><span class="info">' + data.weather[0].main + ' - ' + data.weather[0].description + '<br/>Max: ' + data.main.temp_max + '°C<br/>Min: ' + data.main.temp_min + '°C</span>' );
         });
       },
 
