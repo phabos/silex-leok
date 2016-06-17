@@ -10,7 +10,7 @@ class ArticlesController
 
     public function indexAction( Application $app )
     {
-        $opts = $app['repository.options']->getSettings();
+        $opts = $app['repository.options']->getSettings( 'settings' );
         $options = @json_decode($opts['value']);
     	return $app['twig']->render( 'main.html', array( 'options' => $options ) );
     }
