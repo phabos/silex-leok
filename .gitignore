@@ -10,4 +10,6 @@ upload/
 upload/*
 node_modules/
 node_modules/*
+vendor/
+vendor/*
 .DS_Store
